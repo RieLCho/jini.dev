@@ -1,19 +1,7 @@
 import React from 'react';
-import { Dot } from '../utils/Dot';
-import { Italic } from '../utils/Italic';
-import { SubTitle, Title } from '../utils/Title';
 
 export const WorkExperiences = () => {
     return (
-<<<<<<< Updated upstream
-        <div className="flex flex-col gap-2">
-            <Title>Work Experiences</Title>
-            <SubTitle>
-                <Dot>NGINE STUDIOS @ NEXON COMPANY</Dot>
-            </SubTitle>
-            <div className="pl-5">
-                <Italic>2021.08 ~ (재직 중)</Italic>
-=======
         <div className="space-y-8 animate-fade-in">
             <h2 className="text-3xl font-heading font-bold text-secondary-900">
                 Work Experiences
@@ -81,7 +69,6 @@ export const WorkExperiences = () => {
                         </div>
                     </div>
                 </div>
->>>>>>> Stashed changes
             </div>
         </div>
     );

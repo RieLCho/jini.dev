@@ -42,6 +42,7 @@ const Header = () => {
                             target="_blank" 
                             href="https://sheepjin99.tistory.com/"
                             className="text-secondary-600 hover:text-primary-600 transition-colors"
+                            rel="noopener noreferrer"
                         >
                             Tistory
                         </a>
@@ -49,6 +50,7 @@ const Header = () => {
                             target="_blank" 
                             href="https://github.com/RieLCho"
                             className="text-secondary-600 hover:text-primary-600 transition-colors"
+                            rel="noopener noreferrer"
                         >
                             GitHub
                         </a>
@@ -56,6 +58,7 @@ const Header = () => {
                             target="_blank" 
                             href="https://twitter.com/jini_QwQ"
                             className="text-secondary-600 hover:text-primary-600 transition-colors"
+                            rel="noopener noreferrer"
                         >
                             Twitter
                         </a>
@@ -68,21 +71,6 @@ const Header = () => {
 
 const Main = () => {
     return (
-<<<<<<< Updated upstream
-        <body className="h-fit w-full 2xl:px-64 xl:px-16 lg:px-16 md:px-16 sm:px-0">
-            <div
-                className="2xl:px-48 xl:px-16 lg:px-16 md:px-8 sm:px-6 
-                2xl:py-20 xl:py-20 lg:py-16 md:py-8 sm:py-6 
-            bg-bg100 
-            2xl:space-y-20 xl:space-y-16 lg:space-y-10 md:space-y-5 sm:space-y-5 
-            shadow-box border-2 rounded-3xl"
-            >
-                <PersonalInfo />
-                <WorkExperiences />
-                <Education />
-                <PersonalProjects />
-                <Contribution />
-=======
         <main className="pt-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="space-y-24">
@@ -102,7 +90,6 @@ const Main = () => {
                         <Contribution />
                     </section>
                 </div>
->>>>>>> Stashed changes
             </div>
         </main>
     );
@@ -110,12 +97,6 @@ const Main = () => {
 
 const Footer = () => {
     return (
-<<<<<<< Updated upstream
-        <footer className="bg-black pt-4 justify-center align-middle h-20 font-maple-light md:text-base text-xs text-white">
-            <div>
-                <p className="text-center">© 2024 Yangjin Cho. All rights reserved.</p>
-                <p className="text-center">이 페이지에는 메이플스토리가제공한 메이플스토리 서체가 적용되어 있습니다.</p>
-=======
         <footer className="bg-secondary-900 text-secondary-100 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center space-y-2">
@@ -124,7 +105,6 @@ const Footer = () => {
                         Built with React, TypeScript, and Tailwind CSS
                     </p>
                 </div>
->>>>>>> Stashed changes
             </div>
         </footer>
     );
@@ -132,17 +112,9 @@ const Footer = () => {
 
 const App = () => {
     return (
-<<<<<<< Updated upstream
-        <>
-            <div className="w-full h-full p-10 bg-bg200">
-                <Header />
-                <Main />
-            </div>
-=======
         <div className="min-h-screen bg-background-light">
             <Header />
             <Main />
->>>>>>> Stashed changes
             <Footer />
         </div>
     );
