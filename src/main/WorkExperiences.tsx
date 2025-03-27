@@ -14,7 +14,7 @@ export const WorkExperiences = () => {
                             NGINE STUDIOS @ NEXON COMPANY
                         </h3>
                         <a 
-                            href="https://career.nexon.com/user/recruit/member/postList?joinCorp=GN" 
+                            href="https://careers.nexon.com/recruit?corpCodes=GN" 
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-primary-500 hover:text-primary-600 transition-colors"
@@ -28,7 +28,7 @@ export const WorkExperiences = () => {
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <a 
-                                href="https://docs.gamescale.io/ko/doc/49/categories/13993" 
+                                href="https://developers.gamescale.io/ko/services/47" 
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block text-lg font-medium text-secondary-800 hover:text-primary-600 transition-colors"
