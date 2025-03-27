@@ -5,13 +5,75 @@ interface Command {
     output: React.ReactNode;
 }
 
+interface FileSystemNode {
+    type: 'file' | 'directory';
+    name: string;
+    content?: string;
+    children?: { [key: string]: FileSystemNode };
+}
+
 export const Terminal: React.FC = () => {
     const [commands, setCommands] = useState<Command[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
+    const [currentPath, setCurrentPath] = useState<string[]>(['/']);
     const terminalRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const [fileSystem] = useState<FileSystemNode>({
+        type: 'directory',
+        name: '/',
+        children: {
+            home: {
+                type: 'directory',
+                name: 'home',
+                children: {
+                    user: {
+                        type: 'directory',
+                        name: 'user',
+                        children: {
+                            'about.txt': {
+                                type: 'file',
+                                name: 'about.txt',
+                                content: '안녕하세요! 저는 웹 개발에 열정을 가진 풀스택 개발자입니다.\n사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드를 작성하는 것을 좋아합니다.'
+                            },
+                            'experience.txt': {
+                                type: 'file',
+                                name: 'experience.txt',
+                                content: 'NGINE STUDIOS @ NEXON COMPANY\n2021.08 ~ (재직 중)\n\n- AD Creator 프론트엔드 개발\n- 넥슨 크리에이터즈 프론트엔드 개발'
+                            },
+                            'education.txt': {
+                                type: 'file',
+                                name: 'education.txt',
+                                content: '동국대학교 공과대학 컴퓨터공학과\n2019.03 ~ (재학 중)\nGPA: 3.76/4.5'
+                            },
+                            'skills.txt': {
+                                type: 'file',
+                                name: 'skills.txt',
+                                content: 'React, TypeScript, Node.js, Next.js'
+                            }
+                        }
+                    }
+                }
+            },
+            'README.md': {
+                type: 'file',
+                name: 'README.md',
+                content: 'Welcome to my portfolio!\n\nUse the following commands to navigate:\n- ls: List directory contents\n- cd: Change directory\n- cat: Display file contents\n- pwd: Print working directory\n- help: Show available commands'
+            }
+        }
+    });
+
+    const getCurrentDirectory = () => {
+        let current = fileSystem;
+        for (const dir of currentPath.slice(1)) {
+            if (current.children && current.children[dir]) {
+                current = current.children[dir];
+            }
+        }
+        return current;
+    };
 
     const commandsList = {
         help: () => (
@@ -26,9 +88,65 @@ export const Terminal: React.FC = () => {
                     <li>skills - 기술 스택</li>
                     <li>contact - 연락처</li>
                     <li>clear - 화면 지우기</li>
+                    <li>ls - 디렉토리 내용 표시</li>
+                    <li>cd [directory] - 디렉토리 이동</li>
+                    <li>cat [file] - 파일 내용 표시</li>
+                    <li>pwd - 현재 작업 디렉토리 표시</li>
                 </ul>
             </div>
         ),
+        ls: () => {
+            const current = getCurrentDirectory();
+            if (current.type !== 'directory') {
+                return <p className="text-red-500">Error: Not a directory</p>;
+            }
+            const items = Object.entries(current.children || {}).map(([name, node]) => ({
+                name,
+                type: node.type
+            }));
+            return (
+                <div className="grid grid-cols-2 gap-2">
+                    {items.map((item, index) => (
+                        <div key={index} className={item.type === 'directory' ? 'text-blue-400' : 'text-green-400'}>
+                            {item.name}
+                        </div>
+                    ))}
+                </div>
+            );
+        },
+        cd: (args: string[]) => {
+            if (args.length === 0) {
+                return <p className="text-red-500">Error: Please specify a directory</p>;
+            }
+            const target = args[0];
+            if (target === '..') {
+                if (currentPath.length > 1) {
+                    setCurrentPath(prev => prev.slice(0, -1));
+                    return <p>Directory changed</p>;
+                }
+                return <p className="text-red-500">Error: Already at root directory</p>;
+            }
+            const current = getCurrentDirectory();
+            if (current.children && current.children[target] && current.children[target].type === 'directory') {
+                setCurrentPath(prev => [...prev, target]);
+                return <p>Directory changed</p>;
+            }
+            return <p className="text-red-500">Error: Directory not found</p>;
+        },
+        cat: (args: string[]) => {
+            if (args.length === 0) {
+                return <p className="text-red-500">Error: Please specify a file</p>;
+            }
+            const current = getCurrentDirectory();
+            const file = current.children?.[args[0]];
+            if (!file || file.type !== 'file') {
+                return <p className="text-red-500">Error: File not found</p>;
+            }
+            return <pre className="whitespace-pre-wrap">{file.content}</pre>;
+        },
+        pwd: () => {
+            return <p>{currentPath.join('/')}</p>;
+        },
         about: () => (
             <div className="space-y-2">
                 <p>안녕하세요! 저는 웹 개발에 열정을 가진 풀스택 개발자입니다.</p>
@@ -89,7 +207,7 @@ export const Terminal: React.FC = () => {
     };
 
     const handleCommand = (input: string) => {
-        const command = input.toLowerCase().trim();
+        const [command, ...args] = input.toLowerCase().trim().split(' ');
         
         if (command === 'clear') {
             setCommands([]);
@@ -99,10 +217,17 @@ export const Terminal: React.FC = () => {
             return;
         }
 
-        const output = commandsList[command as keyof typeof commandsList]?.() || (
-            <p className="text-red-500">명령어를 찾을 수 없습니다. 'help'를 입력하여 사용 가능한 명령어를 확인하세요.</p>
-        );
+        const commandFn = commandsList[command as keyof typeof commandsList];
+        if (!commandFn) {
+            const output = <p className="text-red-500">명령어를 찾을 수 없습니다. 'help'를 입력하여 사용 가능한 명령어를 확인하세요.</p>;
+            setCommands(prev => [...prev, { input, output }]);
+            setHistory(prev => [...prev, input]);
+            setHistoryIndex(-1);
+            setCurrentInput('');
+            return;
+        }
 
+        const output = commandFn(args);
         setCommands(prev => [...prev, { input, output }]);
         setHistory(prev => [...prev, input]);
         setHistoryIndex(-1);
