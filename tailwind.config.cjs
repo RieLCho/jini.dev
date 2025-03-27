@@ -17,6 +17,7 @@ module.exports = {
             fontFamily: {
                 'sans': ['Pretendard', 'sans-serif'],
                 'heading': ['Pretendard', 'sans-serif'],
+                'ascii': ['Courier New', 'Courier', 'monospace'],
             },
             colors: {
                 primary: {
@@ -51,6 +52,9 @@ module.exports = {
             animation: {
                 'fade-in': 'fadeIn 0.5s ease-in-out',
                 'slide-up': 'slideUp 0.5s ease-out',
+                'float': 'float 3s ease-in-out infinite',
+                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'blink': 'blink 1s step-end infinite',
             },
             keyframes: {
                 fadeIn: {
