@@ -6,7 +6,7 @@ import { Education } from '../main/Education';
 import { PersonalProjects } from '../main/PersonalProjects';
 import { Contributions } from '../main/Contributions';
 import { WindowManager } from '../main/WindowManager';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 interface Command {
     input: string;
@@ -172,7 +172,7 @@ const LoadingDots = () => {
 };
 
 const useSystemInfo = () => {
-    return useQuery({
+    return useSuspenseQuery({
         queryKey: ['systemInfo'],
         queryFn: async () => {
             const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/system/info`);
