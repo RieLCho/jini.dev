@@ -1,3 +1,5 @@
+name: Deploy
+
 on:
     push:
         branches:
@@ -8,8 +10,21 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3.3.0
-            - name: execute remote ssh
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'yarn'
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Build
+              run: yarn build
+
+            - name: Deploy to server
               uses: appleboy/ssh-action@master
               with:
                   host: ${{ secrets.REMOTE_IP }}
