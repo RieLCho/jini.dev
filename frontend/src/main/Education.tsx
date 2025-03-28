@@ -11,14 +11,13 @@ interface Education {
 
 const educationData: Education[] = [
     {
-        school: '한양대학교',
-        degree: '학사',
-        period: '2018.03 - 2024.02',
-        major: '컴퓨터소프트웨어학부',
-        gpa: '4.01/4.5',
-        description: ['ACM-ICPC 서울 리저널 본선 진출', '교내 알고리즘 대회 수상', '소프트웨어학부 학생회 기술부장'],
+        school: '동국대학교 (서울)',
+        degree: '4학년 학업병행 중',
+        period: '2019.03 - 2026.02 (예정)',
+        major: '공과대학 컴퓨터공학과',
+        gpa: '3.78/4.5',
+        description: ['동국대학교 프로그래밍 중앙동아리 CAPS 33.5기 부회장'],
     },
-    // 추가 학력 정보가 있다면 여기에 추가
 ];
 
 export const Education: React.FC = () => {
