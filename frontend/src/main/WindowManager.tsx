@@ -4,7 +4,7 @@ import { PersonalInfo } from './PersonalInfo';
 import { WorkExperiences } from './WorkExperiences';
 import { Education } from './Education';
 import { PersonalProjects } from './PersonalProjects';
-import Contributions from './Contributions';
+import { Contributions } from './Contributions';
 
 // 윈도우 관리를 위한 Context
 type WindowType = {
