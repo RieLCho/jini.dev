@@ -176,9 +176,9 @@ export const Terminal: React.FC = () => {
                 type: 'directory',
                 name: 'home',
                 children: {
-                    user: {
+                    yangjin: {
                         type: 'directory',
-                        name: 'user',
+                        name: 'yangjin',
                         children: {
                             about: {
                                 type: 'binary',
@@ -194,11 +194,6 @@ export const Terminal: React.FC = () => {
                                 type: 'binary',
                                 name: 'education',
                                 component: 'Education',
-                            },
-                            skills: {
-                                type: 'binary',
-                                name: 'skills',
-                                component: 'PersonalInfo',
                             },
                             projects: {
                                 type: 'binary',
