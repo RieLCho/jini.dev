@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaGithub, FaLink } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaGithub, FaLink, FaChevronDown, FaChevronUp, FaExternalLinkAlt } from 'react-icons/fa';
 
 interface Project {
     title: string;
@@ -9,7 +9,7 @@ interface Project {
     github?: string;
     demo?: string;
     features: string[];
-    image?: string;
+    readmePath?: string;
 }
 
 const projectsData: Project[] = [
@@ -19,7 +19,9 @@ const projectsData: Project[] = [
         period: '2020.12',
         skills: ['Swift', 'Xcode', 'UIKit', 'CoreML'],
         github: 'https://github.com/RieLCho/SleepWithAI',
+        demo: 'https://apps.apple.com/us/app/sleepwithai/id1498395373',
         features: ['AI를 활용한 수면 데이터 저장 및 맞춤형 알람 기능', 'Realm 데이터베이스 활용'],
+        readmePath: 'RieLCho/SleepWithAI',
     },
     {
         title: 'Barcode',
@@ -28,6 +30,7 @@ const projectsData: Project[] = [
         skills: ['Java', 'Android Studio', 'Kotlin', 'Firebase', 'Google Vision API'],
         github: 'https://github.com/CSID-DGU/2021-1-OSSP2-Barcode-8',
         features: ['바코드 스캔 앱', '편의점 PB 상품 후기 공유'],
+        readmePath: 'CSID-DGU/2021-1-OSSP2-Barcode-8',
     },
     {
         title: 'Hayaku',
@@ -36,6 +39,7 @@ const projectsData: Project[] = [
         skills: ['Java', 'Android Studio', 'Twitter4j', 'Glide'],
         github: 'https://github.com/RieLCho/Hayaku',
         features: ['상단바에서 언제 어디서든 쉽게 트윗'],
+        readmePath: 'RieLCho/Hayaku',
     },
     {
         title: 'AI 모델 보안 강화 연구',
@@ -44,105 +48,152 @@ const projectsData: Project[] = [
         skills: ['Python', 'Adversarial-Robustness-Toolbox', 'TensorFlow', ],
         github: 'https://github.com/RieLCho/AI-Model-Security-Enhancement',
         features: ['AI 모델 생성 시 발생할 수 있는 보안 취약점을 분석', '사전에 제거, 방어, 검출 하기 위한 기법을 연구'],
+        readmePath: 'RieLCho/AI-Model-Security-Enhancement',
     }
 ];
 
 export const PersonalProjects: React.FC = () => {
-    const [imgErrors, setImgErrors] = React.useState<{[key: string]: boolean}>({});
+    const [expandedProject, setExpandedProject] = useState<string | null>(null);
     
-    const handleImageError = (projectId: string) => {
-        setImgErrors(prev => ({...prev, [projectId]: true}));
+    const toggleProject = (projectTitle: string) => {
+        if (expandedProject === projectTitle) {
+            setExpandedProject(null);
+            return;
+        }
+        
+        setExpandedProject(projectTitle);
     };
-
+    
     return (
         <div className="p-6 space-y-8">
-            <h2 className="text-2xl font-bold text-white mb-6">개인 프로젝트</h2>
+            <h2 className="text-2xl font-bold text-white mb-8 pb-2 border-b border-secondary-700">개인 프로젝트</h2>
             <div className="grid gap-8">
                 {projectsData.map((project, index) => (
                     <div
                         key={index}
-                        className="bg-secondary-800 rounded-lg overflow-hidden hover:bg-secondary-700 transition-colors"
+                        className="bg-secondary-800 rounded-lg overflow-hidden hover:bg-secondary-750 transition-all duration-300 border border-secondary-700 shadow-lg"
                     >
-                        <div className="flex flex-col md:flex-row">
-                            {project.image && !imgErrors[project.title] ? (
-                                <div className="md:w-2/5 bg-gradient-to-br from-secondary-800 to-secondary-900 relative overflow-hidden group">
-                                    <div className="absolute inset-0 bg-blue-500 opacity-10 group-hover:opacity-15 transition-opacity duration-300"></div>
-                                    <div className="flex items-center justify-center h-full p-6">
-                                        <div className="relative rounded-lg overflow-hidden shadow-xl  border-2 border-secondary-700">
-                                            <img 
-                                                src={project.image} 
-                                                alt={project.title} 
-                                                className="max-w-full h-auto max-h-[300px] object-contain bg-black bg-opacity-30 backdrop-blur-sm p-3"
-                                                onError={() => handleImageError(project.title)}
-                                            />
-                                        </div>
-                                    </div>
+                        {/* 프로젝트 헤더 - 클릭 시 확장/축소 */}
+                        <div 
+                            className="p-6 cursor-pointer"
+                            onClick={() => toggleProject(project.title)}
+                        >
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className="text-xl font-bold text-white mb-1 flex items-center">
+                                        {project.title}
+                                        <span className="ml-2 text-blue-400">
+                                            {expandedProject === project.title ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
+                                        </span>
+                                    </h3>
+                                    <p className="text-secondary-300">{project.description}</p>
+                                    <p className="text-secondary-300 mt-1 flex items-center text-sm">
+                                        <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                        {project.period}
+                                    </p>
                                 </div>
-                            ) : project.image && imgErrors[project.title] ? (
-                                <div className="md:w-2/5 bg-gradient-to-br from-secondary-800 to-secondary-900 flex items-center justify-center p-6">
-                                    <div className="flex flex-col items-center justify-center h-[250px] text-secondary-400 bg-secondary-800 p-8 rounded-lg border border-secondary-700 w-full">
-                                        <svg className="w-20 h-20 mb-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p className="text-center">이미지를 불러올 수 없습니다</p>
-                                        <h3 className="text-white text-xl font-bold mt-4">{project.title}</h3>
-                                    </div>
+                                <div className="flex gap-2">
+                                    {project.github && (
+                                        <a
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-white hover:text-white transition-all bg-blue-600 hover:bg-blue-500 p-2 rounded-full shadow-md hover:shadow-lg"
+                                            title="GitHub 저장소"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <FaGithub size={20} />
+                                        </a>
+                                    )}
+                                    {project.demo && (
+                                        <a
+                                            href={project.demo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-white hover:text-white transition-all bg-green-600 hover:bg-green-500 p-2 rounded-full shadow-md hover:shadow-lg"
+                                            title="데모 보기"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <FaLink size={20} />
+                                        </a>
+                                    )}
                                 </div>
-                            ) : null}
-                            <div className={`p-6 ${project.image ? 'md:w-3/5' : 'w-full'}`}>
-                                <div className="flex justify-between items-start mb-3">
-                                    <div>
-                                        <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                                        <p className="text-secondary-300">{project.description}</p>
-                                        <p className="text-secondary-300 mt-1">{project.period}</p>
+                            </div>
+                            
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {project.skills.map((skill, i) => (
+                                    <span
+                                        key={i}
+                                        className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm font-medium hover:bg-secondary-600 hover:text-white transition-colors duration-200"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                            
+                            <div className="mt-4">
+                                <h4 className="text-white font-bold mb-3 flex items-center">
+                                    <span className="mr-2 bg-blue-500 h-5 w-1 rounded-full inline-block"></span>
+                                    주요 기능
+                                </h4>
+                                <ul className="list-none space-y-2 ml-1">
+                                    {project.features.map((feature, i) => (
+                                        <li key={i} className="text-secondary-300 flex items-start">
+                                            <span className="text-blue-400 mr-2 mt-1">•</span>
+                                            <span>{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        {/* 확장됐을 때 표시되는 GitHub 영역 */}
+                        {expandedProject === project.title && (
+                            <div className="border-t border-secondary-700 p-6 bg-secondary-850 animate-fadeIn">
+                                <h4 className="text-lg font-bold text-white mb-4 flex items-center">
+                                    <span className="mr-2 bg-green-500 h-5 w-1 rounded-full inline-block"></span>
+                                    프로젝트 상세 정보
+                                </h4>
+                                
+                                <div className="bg-secondary-800 p-6 rounded-lg border border-secondary-700">
+                                    <div className="flex justify-center items-center py-2 mb-4">
+                                        <FaGithub size={40} className="text-white mr-4" />
+                                        <h3 className="text-lg font-bold text-white">{project.readmePath}</h3>
                                     </div>
-                                    <div className="flex gap-2">
-                                        {project.github && (
+                                    
+                                    <div className="flex flex-col items-center justify-center space-y-4">
+                                        <p className="text-secondary-300 text-center max-w-2xl">
+                                            이 프로젝트에 대한 자세한 정보는 GitHub에서 확인할 수 있습니다.
+                                            아래 버튼을 클릭하여 GitHub 저장소로 이동하세요.
+                                        </p>
+                                        
+                                        <a
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center font-medium"
+                                        >
+                                            <FaGithub size={20} className="mr-2" />
+                                            GitHub 저장소 방문하기
+                                            <FaExternalLinkAlt size={14} className="ml-2" />
+                                        </a>
+                                        
+                                        {project.readmePath && (
                                             <a
-                                                href={project.github}
+                                                href={`https://github.com/${project.readmePath}/blob/master/README.md`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-secondary-300 hover:text-white transition-colors bg-secondary-700 hover:bg-secondary-600 p-2 rounded"
+                                                className="px-6 py-3 bg-secondary-700 hover:bg-secondary-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center font-medium"
                                             >
-                                                <FaGithub size={20} />
+                                                README 파일 보기
+                                                <FaExternalLinkAlt size={14} className="ml-2" />
                                             </a>
                                         )}
-                                        {project.demo && (
-                                            <a
-                                                href={project.demo}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-secondary-300 hover:text-white transition-colors bg-secondary-700 hover:bg-secondary-600 p-2 rounded"
-                                            >
-                                                <FaLink size={20} />
-                                            </a>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="space-y-4 mt-4">
-                                    <div>
-                                        <h4 className="text-white font-bold mb-2">주요 기능</h4>
-                                        <ul className="list-disc list-inside space-y-1">
-                                            {project.features.map((feature, i) => (
-                                                <li key={i} className="text-secondary-300">
-                                                    {feature}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2 mt-4">
-                                        {project.skills.map((skill, i) => (
-                                            <span
-                                                key={i}
-                                                className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm"
-                                            >
-                                                {skill}
-                                            </span>
-                                        ))}
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 ))}
             </div>
