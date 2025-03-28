@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaGithub, FaLink, FaChevronDown, FaChevronUp, FaExternalLinkAlt } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
+
+// 마크다운 파일 가져오기
+import SWAIReadme from './readme/SWAI.md?raw';
+import BarcodeReadme from './readme/Barcode.md?raw';
+import HayakuReadme from './readme/Hayaku.md?raw';
+import ARTReadme from './readme/ART.md?raw';
 
 interface Project {
     title: string;
@@ -10,6 +17,7 @@ interface Project {
     demo?: string;
     features: string[];
     readmePath?: string;
+    readmeContent?: string;
 }
 
 const projectsData: Project[] = [
@@ -22,6 +30,7 @@ const projectsData: Project[] = [
         demo: 'https://apps.apple.com/us/app/sleepwithai/id1498395373',
         features: ['AI를 활용한 수면 데이터 저장 및 맞춤형 알람 기능', 'Realm 데이터베이스 활용'],
         readmePath: 'RieLCho/SleepWithAI',
+        readmeContent: SWAIReadme,
     },
     {
         title: 'Barcode',
@@ -31,6 +40,7 @@ const projectsData: Project[] = [
         github: 'https://github.com/CSID-DGU/2021-1-OSSP2-Barcode-8',
         features: ['바코드 스캔 앱', '편의점 PB 상품 후기 공유'],
         readmePath: 'CSID-DGU/2021-1-OSSP2-Barcode-8',
+        readmeContent: BarcodeReadme,
     },
     {
         title: 'Hayaku',
@@ -40,6 +50,7 @@ const projectsData: Project[] = [
         github: 'https://github.com/RieLCho/Hayaku',
         features: ['상단바에서 언제 어디서든 쉽게 트윗'],
         readmePath: 'RieLCho/Hayaku',
+        readmeContent: HayakuReadme,
     },
     {
         title: 'AI 모델 보안 강화 연구',
@@ -49,6 +60,7 @@ const projectsData: Project[] = [
         github: 'https://github.com/RieLCho/AI-Model-Security-Enhancement',
         features: ['AI 모델 생성 시 발생할 수 있는 보안 취약점을 분석', '사전에 제거, 방어, 검출 하기 위한 기법을 연구'],
         readmePath: 'RieLCho/AI-Model-Security-Enhancement',
+        readmeContent: ARTReadme,
     }
 ];
 
@@ -148,49 +160,31 @@ export const PersonalProjects: React.FC = () => {
                             </div>
                         </div>
                         
-                        {/* 확장됐을 때 표시되는 GitHub 영역 */}
+                        {/* 확장됐을 때 표시되는 README 영역 */}
                         {expandedProject === project.title && (
                             <div className="border-t border-secondary-700 p-6 bg-secondary-850 animate-fadeIn">
                                 <h4 className="text-lg font-bold text-white mb-4 flex items-center">
                                     <span className="mr-2 bg-green-500 h-5 w-1 rounded-full inline-block"></span>
-                                    프로젝트 상세 정보
+                                    README
                                 </h4>
                                 
-                                <div className="bg-secondary-800 p-6 rounded-lg border border-secondary-700">
-                                    <div className="flex justify-center items-center py-2 mb-4">
-                                        <FaGithub size={40} className="text-white mr-4" />
-                                        <h3 className="text-lg font-bold text-white">{project.readmePath}</h3>
-                                    </div>
-                                    
-                                    <div className="flex flex-col items-center justify-center space-y-4">
-                                        <p className="text-secondary-300 text-center max-w-2xl">
-                                            이 프로젝트에 대한 자세한 정보는 GitHub에서 확인할 수 있습니다.
-                                            아래 버튼을 클릭하여 GitHub 저장소로 이동하세요.
-                                        </p>
-                                        
-                                        <a
-                                            href={project.github}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center font-medium"
-                                        >
-                                            <FaGithub size={20} className="mr-2" />
-                                            GitHub 저장소 방문하기
-                                            <FaExternalLinkAlt size={14} className="ml-2" />
-                                        </a>
-                                        
-                                        {project.readmePath && (
+                                <div className="bg-secondary-800 p-6 rounded-lg border border-secondary-700 overflow-auto markdown-body">
+                                    {project.readmeContent ? (
+                                        <ReactMarkdown>{project.readmeContent}</ReactMarkdown>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center space-y-4">
+                                            <p className="text-secondary-300 text-center">README 내용을 불러올 수 없습니다.</p>
                                             <a
                                                 href={`https://github.com/${project.readmePath}/blob/master/README.md`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="px-6 py-3 bg-secondary-700 hover:bg-secondary-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center font-medium"
                                             >
-                                                README 파일 보기
+                                                GitHub에서 README 보기
                                                 <FaExternalLinkAlt size={14} className="ml-2" />
                                             </a>
-                                        )}
-                                    </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
