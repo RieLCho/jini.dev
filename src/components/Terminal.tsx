@@ -38,7 +38,11 @@ interface NanoEditor {
     cursorPosition: number;
 }
 
-const TypewriterText: React.FC<{ text: string; delay?: number; isLogo?: boolean }> = ({ text, delay = 0, isLogo = false }) => {
+const TypewriterText: React.FC<{ text: string; delay?: number; isLogo?: boolean }> = ({
+    text,
+    delay = 0,
+    isLogo = false,
+}) => {
     const [displayedText, setDisplayedText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
@@ -56,8 +60,8 @@ const TypewriterText: React.FC<{ text: string; delay?: number; isLogo?: boolean 
 
         if (currentIndex < text.length) {
             const timeout = setTimeout(() => {
-                setDisplayedText(prev => prev + text[currentIndex]);
-                setCurrentIndex(prev => prev + 1);
+                setDisplayedText((prev) => prev + text[currentIndex]);
+                setCurrentIndex((prev) => prev + 1);
             }, 5);
 
             return () => clearTimeout(timeout);
@@ -69,19 +73,34 @@ const TypewriterText: React.FC<{ text: string; delay?: number; isLogo?: boolean 
             return <span className="text-white">{displayedText}</span>;
         }
         return displayedText.split('').map((char, index) => {
-            if (char === 's' || char === '+' || char === 'o' || char === '/' || char === '.' || char === '-' || char === '`' || char === ':') {
-                return <span key={index} className="text-[#E95420]">{char}</span>;
+            if (
+                char === 's' ||
+                char === '+' ||
+                char === 'o' ||
+                char === '/' ||
+                char === '.' ||
+                char === '-' ||
+                char === '`' ||
+                char === ':'
+            ) {
+                return (
+                    <span key={index} className="text-[#E95420]">
+                        {char}
+                    </span>
+                );
             }
-            return <span key={index} className="text-white">{char}</span>;
+            return (
+                <span key={index} className="text-white">
+                    {char}
+                </span>
+            );
         });
     };
 
     return <span>{renderText()}</span>;
 };
 
-const BlinkingCursor: React.FC = () => (
-    <span className="inline-block w-2 h-5 bg-secondary-100 animate-blink"></span>
-);
+const BlinkingCursor: React.FC = () => <span className="inline-block w-2 h-5 bg-secondary-100 animate-blink"></span>;
 
 const NanoEditor: React.FC<{
     fileName: string;
@@ -127,9 +146,7 @@ const NanoEditor: React.FC<{
                         spellCheck="false"
                     />
                 </div>
-                <div className="bg-secondary-800 px-4 py-2 text-white font-ascii text-sm">
-                    ^O Write Out  ^X Exit
-                </div>
+                <div className="bg-secondary-800 px-4 py-2 text-white font-ascii text-sm">^O Write Out ^X Exit</div>
             </div>
         </div>
     );
@@ -157,55 +174,58 @@ export const Terminal: React.FC = () => {
                             'about.txt': {
                                 type: 'file',
                                 name: 'about.txt',
-                                content: '안녕하세요! 저는 웹 개발에 열정을 가진 풀스택 개발자입니다.\n사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드를 작성하는 것을 좋아합니다.'
+                                content:
+                                    '안녕하세요! 저는 웹 개발에 열정을 가진 풀스택 개발자입니다.\n사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드를 작성하는 것을 좋아합니다.',
                             },
                             'experience.txt': {
                                 type: 'file',
                                 name: 'experience.txt',
-                                content: 'NGINE STUDIOS @ NEXON COMPANY\n2021.08 ~ (재직 중)\n\n- AD Creator 프론트엔드 개발\n- 넥슨 크리에이터즈 프론트엔드 개발'
+                                content:
+                                    'NGINE STUDIOS @ NEXON COMPANY\n2021.08 ~ (재직 중)\n\n- AD Creator 프론트엔드 개발\n- 넥슨 크리에이터즈 프론트엔드 개발',
                             },
                             'education.txt': {
                                 type: 'file',
                                 name: 'education.txt',
-                                content: '동국대학교 공과대학 컴퓨터공학과\n2019.03 ~ (재학 중)\nGPA: 3.76/4.5'
+                                content: '동국대학교 공과대학 컴퓨터공학과\n2019.03 ~ (재학 중)\nGPA: 3.76/4.5',
                             },
                             'skills.txt': {
                                 type: 'file',
                                 name: 'skills.txt',
-                                content: 'React, TypeScript, Node.js, Next.js'
-                            }
-                        }
-                    }
-                }
+                                content: 'React, TypeScript, Node.js, Next.js',
+                            },
+                        },
+                    },
+                },
             },
             'README.md': {
                 type: 'file',
                 name: 'README.md',
-                content: 'Welcome to my portfolio!\n\nUse the following commands to navigate:\n- ls: List directory contents\n- cd: Change directory\n- cat: Display file contents\n- pwd: Print working directory\n- help: Show available commands'
-            }
-        }
+                content:
+                    'Welcome to my portfolio!\n\nUse the following commands to navigate:\n- ls: List directory contents\n- cd: Change directory\n- cat: Display file contents\n- pwd: Print working directory\n- help: Show available commands',
+            },
+        },
     });
     const terminalRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [nanoEditor, setNanoEditor] = useState<NanoEditor | null>(null);
 
     const systemInfo: SystemInfo = {
-        os: "Portfolio OS",
-        host: "portfolio-terminal",
-        kernel: "React 18.2.0",
-        uptime: "1 minute",
-        packages: "npm (6)",
-        shell: "portfolio-shell",
-        resolution: "1920x1080",
-        de: "Web Browser",
-        wm: "Browser Window",
-        theme: "Dark Mode",
-        icons: "Material Icons",
-        terminal: "Portfolio Terminal",
-        cpu: "Intel(R) Core(TM) i7-12700K",
-        memory: "16GB / 32GB",
-        gpu: "NVIDIA GeForce RTX 3080",
-        disk: "1TB / 2TB"
+        os: 'Portfolio OS',
+        host: 'portfolio-terminal',
+        kernel: 'React 18.2.0',
+        uptime: '1 minute',
+        packages: 'npm (6)',
+        shell: 'portfolio-shell',
+        resolution: '1920x1080',
+        de: 'Web Browser',
+        wm: 'Browser Window',
+        theme: 'Dark Mode',
+        icons: 'Material Icons',
+        terminal: 'Portfolio Terminal',
+        cpu: 'Intel(R) Core(TM) i7-12700K',
+        memory: '16GB / 32GB',
+        gpu: 'NVIDIA GeForce RTX 3080',
+        disk: '1TB / 2TB',
     };
 
     const neofetchOutput = () => (
@@ -296,7 +316,7 @@ export const Terminal: React.FC = () => {
     const createDirectory = (path: string[]) => {
         const newFileSystem = { ...fileSystem };
         let current = newFileSystem;
-        
+
         // 마지막 디렉토리 이름을 제외한 경로로 이동
         for (const dir of path.slice(0, -1)) {
             if (!current.children) {
@@ -306,7 +326,7 @@ export const Terminal: React.FC = () => {
                 current.children[dir] = {
                     type: 'directory',
                     name: dir,
-                    children: {}
+                    children: {},
                 };
             }
             current = current.children[dir];
@@ -321,7 +341,7 @@ export const Terminal: React.FC = () => {
             current.children[dirName] = {
                 type: 'directory',
                 name: dirName,
-                children: {}
+                children: {},
             };
             setFileSystem(newFileSystem);
             return true;
@@ -358,7 +378,7 @@ export const Terminal: React.FC = () => {
             }
             const dirName = args[0];
             const current = getCurrentDirectory();
-            
+
             if (current.children && current.children[dirName]) {
                 return <p className="text-red-500">Error: Directory already exists</p>;
             }
@@ -376,7 +396,7 @@ export const Terminal: React.FC = () => {
             }
             const items = Object.entries(current.children || {}).map(([name, node]) => ({
                 name,
-                type: node.type
+                type: node.type,
             }));
             return (
                 <div className="grid grid-cols-2 gap-2">
@@ -395,14 +415,14 @@ export const Terminal: React.FC = () => {
             const target = args[0];
             if (target === '..') {
                 if (currentPath.length > 1) {
-                    setCurrentPath(prev => prev.slice(0, -1));
+                    setCurrentPath((prev) => prev.slice(0, -1));
                     return <p>Directory changed</p>;
                 }
                 return <p className="text-red-500">Error: Already at root directory</p>;
             }
             const current = getCurrentDirectory();
             if (current.children && current.children[target] && current.children[target].type === 'directory') {
-                setCurrentPath(prev => [...prev, target]);
+                setCurrentPath((prev) => [...prev, target]);
                 return <p>Directory changed</p>;
             }
             return <p className="text-red-500">Error: Directory not found</p>;
@@ -413,7 +433,7 @@ export const Terminal: React.FC = () => {
             }
             const fileName = args[0];
             let current = fileSystem;
-            
+
             // 현재 경로에 따라 파일 시스템 탐색
             for (const dir of currentPath.slice(1)) {
                 if (current.children && current.children[dir]) {
@@ -495,7 +515,7 @@ export const Terminal: React.FC = () => {
             const fileName = args[0];
             const newFileSystem = { ...fileSystem };
             let current = newFileSystem;
-            
+
             for (const dir of currentPath.slice(1)) {
                 if (current.children && current.children[dir]) {
                     current = current.children[dir];
@@ -508,7 +528,7 @@ export const Terminal: React.FC = () => {
                     isOpen: true,
                     fileName,
                     content: file.content || '',
-                    cursorPosition: 0
+                    cursorPosition: 0,
                 });
                 return null;
             } else {
@@ -519,14 +539,14 @@ export const Terminal: React.FC = () => {
                 current.children[fileName] = {
                     type: 'file',
                     name: fileName,
-                    content: ''
+                    content: '',
                 };
                 setFileSystem(newFileSystem);
                 setNanoEditor({
                     isOpen: true,
                     fileName,
                     content: '',
-                    cursorPosition: 0
+                    cursorPosition: 0,
                 });
                 return null;
             }
@@ -535,10 +555,10 @@ export const Terminal: React.FC = () => {
 
     const handleCommand = (input: string) => {
         const [command, ...args] = input.toLowerCase().trim().split(' ');
-        
+
         if (command === 'clear') {
             setCommands([]);
-            setHistory(prev => [...prev, input]);
+            setHistory((prev) => [...prev, input]);
             setHistoryIndex(-1);
             setCurrentInput('');
             return;
@@ -546,17 +566,21 @@ export const Terminal: React.FC = () => {
 
         const commandFn = commandsList[command as keyof typeof commandsList];
         if (!commandFn) {
-            const output = <p className="text-red-500">명령어를 찾을 수 없습니다. 'help'를 입력하여 사용 가능한 명령어를 확인하세요.</p>;
-            setCommands(prev => [...prev, { input, output }]);
-            setHistory(prev => [...prev, input]);
+            const output = (
+                <p className="text-red-500">
+                    명령어를 찾을 수 없습니다. 'help'를 입력하여 사용 가능한 명령어를 확인하세요.
+                </p>
+            );
+            setCommands((prev) => [...prev, { input, output }]);
+            setHistory((prev) => [...prev, input]);
             setHistoryIndex(-1);
             setCurrentInput('');
             return;
         }
 
         const output = commandFn(args);
-        setCommands(prev => [...prev, { input, output }]);
-        setHistory(prev => [...prev, input]);
+        setCommands((prev) => [...prev, { input, output }]);
+        setHistory((prev) => [...prev, input]);
         setHistoryIndex(-1);
         setCurrentInput('');
     };
@@ -569,11 +593,11 @@ export const Terminal: React.FC = () => {
 
     const findCompletion = (input: string): string | null => {
         const items = getCurrentDirectoryItems();
-        const matches = items.filter(item => item.startsWith(input));
-        
+        const matches = items.filter((item) => item.startsWith(input));
+
         if (matches.length === 0) return null;
         if (matches.length === 1) return matches[0];
-        
+
         // 여러 개의 매칭이 있을 경우 공통 접두사를 찾음
         const commonPrefix = matches.reduce((prefix, item) => {
             let i = 0;
@@ -582,7 +606,7 @@ export const Terminal: React.FC = () => {
             }
             return prefix.slice(0, i);
         });
-        
+
         return commonPrefix;
     };
 
@@ -593,10 +617,10 @@ export const Terminal: React.FC = () => {
             e.preventDefault();
             const [command, ...args] = currentInput.split(' ');
             const lastArg = args[args.length - 1] || '';
-            
+
             // 명령어 자동완성
             if (args.length === 0) {
-                const commandMatches = Object.keys(commandsList).filter(cmd => cmd.startsWith(command));
+                const commandMatches = Object.keys(commandsList).filter((cmd) => cmd.startsWith(command));
                 if (commandMatches.length === 1) {
                     setCurrentInput(commandMatches[0] + ' ');
                 } else if (commandMatches.length > 1) {
@@ -609,7 +633,7 @@ export const Terminal: React.FC = () => {
                     });
                     setCurrentInput(commonPrefix);
                 }
-            } 
+            }
             // 파일/디렉토리 자동완성
             else {
                 const completion = findCompletion(lastArg);
@@ -642,7 +666,7 @@ export const Terminal: React.FC = () => {
         if (nanoEditor) {
             const newFileSystem = { ...fileSystem };
             let current = newFileSystem;
-            
+
             // 현재 경로에 따라 파일 시스템 탐색
             for (const dir of currentPath.slice(1)) {
                 if (current.children && current.children[dir]) {
@@ -683,9 +707,9 @@ export const Terminal: React.FC = () => {
                         <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     </div>
                 </div>
-                <div 
+                <div
                     ref={terminalRef}
-                    className="h-[600px] overflow-y-auto p-4 font-ascii text-[12px] text-secondary-100"
+                    className="h-[600px] bg-secondary-700 overflow-y-auto p-4 font-ascii text-[12px] text-secondary-100"
                 >
                     <div className="space-y-2">
                         {commands.map((cmd, index) => (
@@ -694,13 +718,11 @@ export const Terminal: React.FC = () => {
                                     <span className="text-green-500 mr-2">$</span>
                                     <span>{cmd.input}</span>
                                 </div>
-                                {cmd.output && (
-                                    <div className="ml-4">{cmd.output}</div>
-                                )}
+                                {cmd.output && <div className="ml-4">{cmd.output}</div>}
                             </div>
                         ))}
                     </div>
-                    <div className="flex items-center mt-2 sticky bottom-0 bg-secondary-900">
+                    <div className="flex items-center mt-2 sticky bottom-0 bg-secondary-700">
                         <span className="text-green-500 mr-2">$</span>
                         <input
                             ref={inputRef}
@@ -727,4 +749,4 @@ export const Terminal: React.FC = () => {
             )}
         </>
     );
-}; 
+};
