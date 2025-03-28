@@ -31,27 +31,13 @@ export const useWindowManager = () => {
     return context;
 };
 
-export const WindowManager: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [windows, setWindows] = useState<WindowType[]>([]);
-    const [maxZIndex, setMaxZIndex] = useState(100);
+interface WindowManagerProps {
+    onCloseWindow: (windowId: string) => void;
+    openWindows: { id: string; title: string; component: string }[];
+}
 
-    const openWindow = (title: string, component: string) => {
-        const id = Date.now().toString();
-        const newZIndex = maxZIndex + 1;
-        setMaxZIndex(newZIndex);
-        setWindows((prev) => [...prev, { id, title, component, zIndex: newZIndex }]);
-        return id;
-    };
-
-    const closeWindow = (id: string) => {
-        setWindows((prev) => prev.filter((window) => window.id !== id));
-    };
-
-    const bringToFront = (id: string) => {
-        const newZIndex = maxZIndex + 1;
-        setMaxZIndex(newZIndex);
-        setWindows((prev) => prev.map((window) => (window.id === id ? { ...window, zIndex: newZIndex } : window)));
-    };
+export const WindowManager: React.FC<WindowManagerProps> = ({ onCloseWindow, openWindows }) => {
+    const isMobile = window.innerWidth <= 768;
 
     const renderComponent = (componentName: string) => {
         switch (componentName) {
@@ -71,22 +57,25 @@ export const WindowManager: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     return (
-        <WindowManagerContext.Provider value={{ windows, openWindow, closeWindow, bringToFront }}>
-            {children}
-
-            {windows.map((window) => (
+        <>
+            {openWindows.map((window, index) => (
                 <FloatingWindow
                     key={window.id}
                     title={window.title}
-                    onClose={() => closeWindow(window.id)}
-                    initialX={Math.random() * 100 + 50}
-                    initialY={Math.random() * 100 + 50}
-                    customZIndex={window.zIndex}
-                    onFocus={() => bringToFront(window.id)}
+                    onClose={() => onCloseWindow(window.id)}
+                    initialWidth={isMobile ? window.innerWidth : 600}
+                    initialHeight={isMobile ? window.innerHeight - 100 : 400}
+                    initialX={isMobile ? 0 : Math.random() * 100 + 50}
+                    initialY={isMobile ? 50 : Math.random() * 100 + 50}
+                    customZIndex={100 + index}
+                    isResizable={!isMobile}
+                    isDraggable={!isMobile}
                 >
-                    {renderComponent(window.component)}
+                    <div className={`${isMobile ? 'p-4' : 'p-6'} overflow-auto h-full`}>
+                        {renderComponent(window.component)}
+                    </div>
                 </FloatingWindow>
             ))}
-        </WindowManagerContext.Provider>
+        </>
     );
 };

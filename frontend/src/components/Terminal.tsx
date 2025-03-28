@@ -161,12 +161,13 @@ const NanoEditor: React.FC<{
 };
 
 export const Terminal: React.FC = () => {
+    const [isMobile] = useState(window.innerWidth <= 768);
     const [commands, setCommands] = useState<Command[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [currentPath, setCurrentPath] = useState<string[]>(['/']);
-    const [showNeofetch, setShowNeofetch] = useState(true);
+    const [showNeofetch, setShowNeofetch] = useState(!isMobile);
     const [fileSystem, setFileSystem] = useState<FileSystemNode>({
         type: 'directory',
         name: '/',
@@ -782,7 +783,7 @@ Feel free to explore and interact with the terminal!`,
     };
 
     useEffect(() => {
-        if (showNeofetch) {
+        if (showNeofetch && !isMobile) {
             setCommands([{ input: 'neofetch', output: neofetchOutput() }]);
             setShowNeofetch(false);
         }
@@ -790,7 +791,7 @@ Feel free to explore and interact with the terminal!`,
             terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
         }
         inputRef.current?.focus();
-    }, [commands, showNeofetch]);
+    }, [commands, showNeofetch, isMobile]);
 
     return (
         <div className="relative w-[800px]">
