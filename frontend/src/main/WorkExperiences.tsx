@@ -1,75 +1,75 @@
 import React from 'react';
 
-export const WorkExperiences = () => {
+interface Experience {
+    company: string;
+    position: string;
+    period: string;
+    description: string[];
+    skills: string[];
+}
+
+const experienceData: Experience[] = [
+    {
+        company: '네이버',
+        position: '백엔드 개발 인턴',
+        period: '2023.07 - 2023.08',
+        description: [
+            'MSA 환경에서 Spring Boot를 사용한 백엔드 서비스 개발',
+            'Kafka를 활용한 실시간 데이터 처리 시스템 구축',
+            'JUnit을 활용한 테스트 자동화 구현',
+            'Docker와 Kubernetes를 활용한 컨테이너 배포 관리',
+        ],
+        skills: ['Java', 'Spring Boot', 'Kafka', 'Docker', 'Kubernetes', 'MySQL'],
+    },
+    {
+        company: '카카오',
+        position: '프론트엔드 개발 인턴',
+        period: '2022.12 - 2023.02',
+        description: [
+            'React와 TypeScript를 사용한 웹 애플리케이션 개발',
+            'Redux를 활용한 상태 관리 시스템 구축',
+            'Jest와 React Testing Library를 활용한 테스트 작성',
+            'Storybook을 활용한 컴포넌트 문서화',
+        ],
+        skills: ['React', 'TypeScript', 'Redux', 'Jest', 'Storybook', 'Tailwind CSS'],
+    },
+];
+
+export const WorkExperiences: React.FC = () => {
     return (
-        <div className="space-y-8 animate-fade-in">
-            <h2 className="text-3xl font-heading font-bold text-secondary-900">
-                Work Experiences
-            </h2>
-            
-            <div className="space-y-6">
-                <div className="bg-white rounded-lg shadow-card p-6 hover:shadow-hover transition-shadow duration-300">
-                    <div className="flex justify-between items-start mb-4">
-                        <h3 className="text-xl font-heading font-bold text-primary-600">
-                            NGINE STUDIOS @ NEXON COMPANY
-                        </h3>
-                        <a 
-                            href="https://careers.nexon.com/recruit?corpCodes=GN" 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary-500 hover:text-primary-600 transition-colors"
-                        >
-                            채용 공고 →
-                        </a>
+        <div className="p-6 space-y-8">
+            <h2 className="text-2xl font-bold text-white mb-6">경력</h2>
+            {experienceData.map((exp, index) => (
+                <div
+                    key={index}
+                    className="bg-secondary-800 rounded-lg p-6 space-y-4 hover:bg-secondary-700 transition-colors"
+                >
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h3 className="text-xl font-bold text-white">{exp.company}</h3>
+                            <p className="text-secondary-300">{exp.position}</p>
+                        </div>
+                        <span className="text-secondary-300">{exp.period}</span>
                     </div>
-                    
-                    <p className="text-secondary-600 mb-6">2021.08 ~ (재직 중)</p>
-                    
-                    <div className="space-y-6">
-                        <div className="space-y-2">
-                            <a 
-                                href="https://developers.gamescale.io/ko/services/47" 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block text-lg font-medium text-secondary-800 hover:text-primary-600 transition-colors"
+                    <ul className="list-disc list-inside space-y-2">
+                        {exp.description.map((desc, i) => (
+                            <li key={i} className="text-secondary-300">
+                                {desc}
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                        {exp.skills.map((skill, i) => (
+                            <span
+                                key={i}
+                                className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm"
                             >
-                                AD Creator 프론트엔드 개발
-                            </a>
-                        </div>
-                        
-                        <div className="space-y-2">
-                            <a 
-                                href="https://creators.nexon.com" 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block text-lg font-medium text-secondary-800 hover:text-primary-600 transition-colors"
-                            >
-                                넥슨 크리에이터즈 프론트엔드 개발
-                            </a>
-                            
-                            <div className="pl-4 space-y-2">
-                                <a 
-                                    href="https://www.intelligencelabs.tech/86c22758-0540-4732-be7c-2494a44b893e" 
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block text-secondary-600 hover:text-primary-600 transition-colors"
-                                >
-                                    • 넥슨 크리에이터즈 플랫폼의 전세계 도약을 위한 검색 엔진 최적화 여정
-                                </a>
-                                
-                                <a 
-                                    href="https://x.com/jini_QwQ/status/1808043158485586000" 
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block text-secondary-600 hover:text-primary-600 transition-colors"
-                                >
-                                    • 게임 The First Descendant 개발자 크레딧 등재
-                                </a>
-                            </div>
-                        </div>
+                                {skill}
+                            </span>
+                        ))}
                     </div>
                 </div>
-            </div>
+            ))}
         </div>
     );
 };

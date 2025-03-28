@@ -140,7 +140,7 @@ export const FloatingWindow: React.FC<FloatingWindowProps> = ({
     return (
         <div
             ref={windowRef}
-            className="fixed bg-secondary-800 rounded-lg shadow-lg overflow-hidden"
+            className="fixed bg-secondary-800 rounded-lg shadow-lg overflow-hidden flex flex-col"
             style={{
                 left: position.x,
                 top: position.y,
@@ -170,7 +170,7 @@ export const FloatingWindow: React.FC<FloatingWindowProps> = ({
             </div>
 
             {/* 윈도우 콘텐츠 */}
-            <div className="flex-1 overflow-hidden">{children}</div>
+            <div className="flex-1 overflow-y-auto bg-secondary-900">{children}</div>
 
             {/* 리사이즈 핸들 */}
             {isResizable && (

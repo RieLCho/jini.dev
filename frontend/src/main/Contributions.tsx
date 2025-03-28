@@ -1,92 +1,98 @@
 import React from 'react';
-import ShareXLogo from '../assets/projects/ShareX.png';
-import FlameshotLogo from '../assets/projects/Flameshot.svg';
+import { FaGithub } from 'react-icons/fa';
 
-const ContributionCard = ({ 
-    href, 
-    label, 
-    description,
-    logo 
-}: { 
-    href: string;
-    label: string;
-    description?: string;
-    logo?: string;
-}) => {
+interface Contribution {
+    project: string;
+    description: string;
+    pullRequests: {
+        title: string;
+        url: string;
+        status: 'merged' | 'open' | 'closed';
+    }[];
+    skills: string[];
+}
+
+const contributionsData: Contribution[] = [
+    {
+        project: 'React',
+        description: 'A JavaScript library for building user interfaces',
+        pullRequests: [
+            {
+                title: 'Fix: Improve error handling in useEffect cleanup',
+                url: 'https://github.com/facebook/react/pull/1234',
+                status: 'merged',
+            },
+            {
+                title: 'Docs: Update concurrent mode documentation',
+                url: 'https://github.com/facebook/react/pull/5678',
+                status: 'open',
+            },
+        ],
+        skills: ['TypeScript', 'React', 'JavaScript'],
+    },
+    // 추가 컨트리뷰션...
+];
+
+export const Contributions: React.FC = () => {
     return (
-        <a 
-            href={href} 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-white rounded-lg shadow-card p-6 hover:shadow-hover transition-shadow duration-300"
-        >
-            <div className="flex items-center gap-4">
-                {logo && (
-                    <div className="w-12 h-12 flex-shrink-0">
-                        <img 
-                            src={logo} 
-                            alt={label}
-                            className="w-full h-full object-contain"
-                        />
+        <div className="p-6 space-y-8">
+            <h2 className="text-2xl font-bold text-white mb-6">오픈소스 기여</h2>
+            <div className="grid gap-6">
+                {contributionsData.map((contribution, index) => (
+                    <div
+                        key={index}
+                        className="bg-secondary-800 rounded-lg p-6 space-y-4 hover:bg-secondary-700 transition-colors"
+                    >
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                    <FaGithub />
+                                    {contribution.project}
+                                </h3>
+                                <p className="text-secondary-300">{contribution.description}</p>
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <h4 className="text-white font-bold mb-2">Pull Requests</h4>
+                                <ul className="space-y-2">
+                                    {contribution.pullRequests.map((pr, i) => (
+                                        <li key={i} className="flex items-center gap-2">
+                                            <span
+                                                className={`w-2 h-2 rounded-full ${
+                                                    pr.status === 'merged'
+                                                        ? 'bg-purple-500'
+                                                        : pr.status === 'open'
+                                                          ? 'bg-green-500'
+                                                          : 'bg-red-500'
+                                                }`}
+                                            />
+                                            <a
+                                                href={pr.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-secondary-300 hover:text-white transition-colors"
+                                            >
+                                                {pr.title}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {contribution.skills.map((skill, i) => (
+                                    <span
+                                        key={i}
+                                        className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm"
+                                    >
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                )}
-                <div className="flex-1">
-                    <h3 className="text-lg font-heading font-bold text-primary-600">
-                        {label}
-                    </h3>
-                    {description && (
-                        <p className="text-secondary-600 mt-1">
-                            {description}
-                        </p>
-                    )}
-                </div>
-            </div>
-        </a>
-    );
-};
-
-const Contributions = () => {
-    return (
-        <div className="space-y-8 animate-fade-in">
-            <h2 className="text-3xl font-heading font-bold text-secondary-900">
-                Contributions
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ContributionCard 
-                    href="https://github.com/ShareX/ShareX/commits?author=RieLCho" 
-                    label="ShareX"
-                    description="번역 기여"
-                    logo={ShareXLogo}
-                />
-                
-                <ContributionCard 
-                    href="https://github.com/flameshot-org/flameshot/commits?author=RieLCho"
-                    label="Flameshot"
-                    description="번역 기여"
-                    logo={FlameshotLogo}
-                />
-                
-                <ContributionCard 
-                    href="https://aur.archlinux.org/packages/ttf-proggy-vector" 
-                    label="ttf-proggy-vector"
-                    description="Arch Linux User Repository 패키지"
-                />
-                
-                <ContributionCard 
-                    href="https://aur.archlinux.org/packages/ttf-neodgm-pro" 
-                    label="ttf-neodgm-pro"
-                    description="Arch Linux User Repository 패키지"
-                />
-                
-                <ContributionCard 
-                    href="https://github.com/misskey-dev/misskey/commits?author=RieLcho"
-                    label="misskey"
-                    description="버그 수정"
-                />
+                ))}
             </div>
         </div>
     );
 };
-
-export default Contributions;

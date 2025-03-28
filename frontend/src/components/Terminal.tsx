@@ -4,7 +4,7 @@ import { PersonalInfo } from '../main/PersonalInfo';
 import { WorkExperiences } from '../main/WorkExperiences';
 import { Education } from '../main/Education';
 import { PersonalProjects } from '../main/PersonalProjects';
-import Contributions from '../main/Contributions';
+import { Contributions } from '../main/Contributions';
 import { WindowManager } from '../main/WindowManager';
 
 interface Command {
