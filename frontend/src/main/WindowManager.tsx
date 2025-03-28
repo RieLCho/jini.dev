@@ -58,7 +58,7 @@ export const WindowManager: React.FC<WindowManagerProps> = ({ onCloseWindow, ope
             case 'WorkExperiences':
                 return { width: 700, height: 500 };
             case 'Education':
-                return { width: 600, height: 400 };
+                return { width: 600, height: 800 };
             default:
                 return { width: 600, height: 400 };
         }

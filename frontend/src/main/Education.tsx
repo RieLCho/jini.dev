@@ -12,12 +12,27 @@ interface Education {
 const educationData: Education[] = [
     {
         school: '동국대학교 (서울)',
-        degree: '4학년 학업병행 중',
+        degree: '4학년',
         period: '2019.03 - 2026.02 (예정)',
         major: '공과대학 컴퓨터공학과',
         gpa: '3.78/4.5',
         description: ['동국대학교 프로그래밍 중앙동아리 CAPS 33.5기 부회장'],
     },
+    {
+        school: '가톨릭대학교 성심교정',
+        degree: '중퇴',
+        period: '2018.03 - 2019.01',
+        major: '컴퓨터정보공학부',
+        description: ['가톨릭대학교 가톨릭대 서브컬쳐동아리 AniCat 활동'],
+    },
+    {
+        school: '배재고등학교',
+        degree: '졸업',
+        period: '2015.03 - 2018.02',
+        major: '이과',
+        description: ['배재고등학교 133기 졸업', '배재고등학교 컴퓨터동아리 SPACE 단장'],
+    },
+
 ];
 
 export const Education: React.FC = () => {
