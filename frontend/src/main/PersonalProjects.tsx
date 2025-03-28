@@ -75,25 +75,31 @@ export const PersonalProjects: React.FC = () => {
                     >
                         <div className="flex flex-col md:flex-row">
                             {project.image && !imgErrors[project.title] ? (
-                                <div className="md:w-1/3 bg-secondary-900 flex items-center justify-center p-4">
-                                    <img 
-                                        src={project.image} 
-                                        alt={project.title} 
-                                        className="max-w-full h-auto max-h-[300px] object-contain rounded-lg shadow-lg"
-                                        onError={() => handleImageError(project.title)}
-                                    />
+                                <div className="md:w-2/5 bg-gradient-to-br from-secondary-800 to-secondary-900 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-blue-500 opacity-10 group-hover:opacity-15 transition-opacity duration-300"></div>
+                                    <div className="flex items-center justify-center h-full p-6">
+                                        <div className="relative rounded-lg overflow-hidden shadow-xl  border-2 border-secondary-700">
+                                            <img 
+                                                src={project.image} 
+                                                alt={project.title} 
+                                                className="max-w-full h-auto max-h-[300px] object-contain bg-black bg-opacity-30 backdrop-blur-sm p-3"
+                                                onError={() => handleImageError(project.title)}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             ) : project.image && imgErrors[project.title] ? (
-                                <div className="md:w-1/3 bg-secondary-900 flex items-center justify-center p-4">
-                                    <div className="flex flex-col items-center justify-center h-[200px] text-secondary-400">
-                                        <svg className="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div className="md:w-2/5 bg-gradient-to-br from-secondary-800 to-secondary-900 flex items-center justify-center p-6">
+                                    <div className="flex flex-col items-center justify-center h-[250px] text-secondary-400 bg-secondary-800 p-8 rounded-lg border border-secondary-700 w-full">
+                                        <svg className="w-20 h-20 mb-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
-                                        <p>이미지를 불러올 수 없습니다</p>
+                                        <p className="text-center">이미지를 불러올 수 없습니다</p>
+                                        <h3 className="text-white text-xl font-bold mt-4">{project.title}</h3>
                                     </div>
                                 </div>
                             ) : null}
-                            <div className={`p-6 ${project.image ? 'md:w-2/3' : 'w-full'}`}>
+                            <div className={`p-6 ${project.image ? 'md:w-3/5' : 'w-full'}`}>
                                 <div className="flex justify-between items-start mb-3">
                                     <div>
                                         <h3 className="text-xl font-bold text-white">{project.title}</h3>
