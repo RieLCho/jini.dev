@@ -747,6 +747,31 @@ Feel free to explore and interact with the terminal!`,
         setOpenWindows((prev) => prev.filter((window) => window.id !== windowId));
     };
 
+    // 컴포넌트별 크기 설정
+    const getWindowSize = (componentName: string) => {
+        if (isMobile) {
+            return {
+                width: window.innerWidth,
+                height: window.innerHeight - 100
+            };
+        }
+        
+        switch (componentName) {
+            case 'PersonalInfo':
+                return { width: 800, height: 600 };
+            case 'PersonalProjects':
+                return { width: 850, height: 650 };
+            case 'Contributions':
+                return { width: 850, height: 650 };
+            case 'WorkExperiences':
+                return { width: 700, height: 500 };
+            case 'Education':
+                return { width: 600, height: 400 };
+            default:
+                return { width: 600, height: 400 };
+        }
+    };
+
     useEffect(() => {
         if (showNeofetch && !isMobile) {
             setCommands([{ input: 'neofetch', output: neofetchOutput() }]);
@@ -810,21 +835,28 @@ Feel free to explore and interact with the terminal!`,
             )}
 
             {/* 열린 윈도우 직접 렌더링 */}
-            {openWindows.map((window) => (
-                <FloatingWindow
-                    key={window.id}
-                    title={window.title}
-                    onClose={() => handleCloseWindow(window.id)}
-                    initialX={Math.random() * 100 + 50}
-                    initialY={Math.random() * 100 + 50}
-                >
-                    {window.component === 'PersonalInfo' && <PersonalInfo />}
-                    {window.component === 'WorkExperiences' && <WorkExperiences />}
-                    {window.component === 'Education' && <Education />}
-                    {window.component === 'PersonalProjects' && <PersonalProjects />}
-                    {window.component === 'Contributions' && <Contributions />}
-                </FloatingWindow>
-            ))}
+            {openWindows.map((window, index) => {
+                const windowSize = getWindowSize(window.component);
+                
+                return (
+                    <FloatingWindow
+                        key={window.id}
+                        title={window.title}
+                        onClose={() => handleCloseWindow(window.id)}
+                        initialWidth={windowSize.width}
+                        initialHeight={windowSize.height}
+                        initialX={Math.random() * (document.documentElement.clientWidth - windowSize.width - 100) + 50}
+                        initialY={Math.random() * (document.documentElement.clientHeight - windowSize.height - 200) + 100}
+                        customZIndex={100 + index}
+                    >
+                        {window.component === 'PersonalInfo' && <PersonalInfo />}
+                        {window.component === 'WorkExperiences' && <WorkExperiences />}
+                        {window.component === 'Education' && <Education />}
+                        {window.component === 'PersonalProjects' && <PersonalProjects />}
+                        {window.component === 'Contributions' && <Contributions />}
+                    </FloatingWindow>
+                );
+            })}
         </div>
     );
 };

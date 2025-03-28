@@ -39,6 +39,31 @@ interface WindowManagerProps {
 export const WindowManager: React.FC<WindowManagerProps> = ({ onCloseWindow, openWindows }) => {
     const isMobile = window.innerWidth <= 768;
 
+    // 컴포넌트별 크기 설정
+    const getWindowSize = (componentName: string) => {
+        if (isMobile) {
+            return {
+                width: window.innerWidth,
+                height: window.innerHeight - 100
+            };
+        }
+        
+        switch (componentName) {
+            case 'PersonalInfo':
+                return { width: 800, height: 600 };
+            case 'PersonalProjects':
+                return { width: 850, height: 650 };
+            case 'Contributions':
+                return { width: 850, height: 650 };
+            case 'WorkExperiences':
+                return { width: 700, height: 500 };
+            case 'Education':
+                return { width: 600, height: 400 };
+            default:
+                return { width: 600, height: 400 };
+        }
+    };
+
     const renderComponent = (componentName: string) => {
         switch (componentName) {
             case 'PersonalInfo':
@@ -58,24 +83,28 @@ export const WindowManager: React.FC<WindowManagerProps> = ({ onCloseWindow, ope
 
     return (
         <>
-            {openWindows.map((windowModal, index) => (
-                <FloatingWindow
-                    key={windowModal.id}
-                    title={windowModal.title}
-                    onClose={() => onCloseWindow(windowModal.id)}
-                    initialWidth={isMobile ? window.innerWidth : 600}
-                    initialHeight={isMobile ? window.innerHeight - 100 : 400}
-                    initialX={isMobile ? 0 : Math.random() * 100 + 50}
-                    initialY={isMobile ? 50 : Math.random() * 100 + 50}
-                    customZIndex={100 + index}
-                    isResizable={!isMobile}
-                    isDraggable={!isMobile}
-                >
-                    <div className={`${isMobile ? 'p-4' : 'p-6'} overflow-auto h-full`}>
-                        {renderComponent(windowModal.component)}
-                    </div>
-                </FloatingWindow>
-            ))}
+            {openWindows.map((windowModal, index) => {
+                const windowSize = getWindowSize(windowModal.component);
+                
+                return (
+                    <FloatingWindow
+                        key={windowModal.id}
+                        title={windowModal.title}
+                        onClose={() => onCloseWindow(windowModal.id)}
+                        initialWidth={windowSize.width}
+                        initialHeight={windowSize.height}
+                        initialX={isMobile ? 0 : Math.random() * 100 + 50}
+                        initialY={isMobile ? 50 : Math.random() * 100 + 50}
+                        customZIndex={100 + index}
+                        isResizable={!isMobile}
+                        isDraggable={!isMobile}
+                    >
+                        <div className={`${isMobile ? 'p-4' : 'p-6'} overflow-auto h-full`}>
+                            {renderComponent(windowModal.component)}
+                        </div>
+                    </FloatingWindow>
+                );
+            })}
         </>
     );
 };
