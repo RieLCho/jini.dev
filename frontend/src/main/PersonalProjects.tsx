@@ -1,11 +1,6 @@
 import React from 'react';
 import { FaGithub, FaLink } from 'react-icons/fa';
-// 이미지 직접 불러오기
-import SWAIImage from '../assets/projects/SWAI.png';
-import AIImage from '../assets/projects/AI.png';
-import BarcodeImage from '../assets/projects/Barcode.png';
-import DongsikImage from '../assets/projects/Dongsik.png';
-import HayakuImage from '../assets/projects/Hayaku.png';
+
 interface Project {
     title: string;
     description: string;
@@ -24,9 +19,7 @@ const projectsData: Project[] = [
         period: '2020.12',
         skills: ['Swift', 'Xcode', 'UIKit', 'CoreML'],
         github: 'https://github.com/RieLCho/SleepWithAI',
-        demo: 'https://apps.apple.com/us/app/sleepwithai/id1498395373',
         features: ['AI를 활용한 수면 데이터 저장 및 맞춤형 알람 기능', 'Realm 데이터베이스 활용'],
-        image: SWAIImage,
     },
     {
         title: 'Barcode',
@@ -35,16 +28,14 @@ const projectsData: Project[] = [
         skills: ['Java', 'Android Studio', 'Kotlin', 'Firebase', 'Google Vision API'],
         github: 'https://github.com/CSID-DGU/2021-1-OSSP2-Barcode-8',
         features: ['바코드 스캔 앱', '편의점 PB 상품 후기 공유'],
-        image: BarcodeImage,
     },
     {
         title: 'Hayaku',
-        description: '구 버전 iOS에 존재하던 "TAP to Twett" 버튼 안드로이드 포팅',
+        description: '구 iOS에 존재하던 "TAP to Tweet" 버튼 안드로이드 포팅',
         period: '2021.03',
         skills: ['Java', 'Android Studio', 'Twitter4j', 'Glide'],
         github: 'https://github.com/RieLCho/Hayaku',
         features: ['상단바에서 언제 어디서든 쉽게 트윗'],
-        image: HayakuImage,
     },
     {
         title: 'AI 모델 보안 강화 연구',
@@ -53,7 +44,6 @@ const projectsData: Project[] = [
         skills: ['Python', 'Adversarial-Robustness-Toolbox', 'TensorFlow', ],
         github: 'https://github.com/RieLCho/AI-Model-Security-Enhancement',
         features: ['AI 모델 생성 시 발생할 수 있는 보안 취약점을 분석', '사전에 제거, 방어, 검출 하기 위한 기법을 연구'],
-        image: AIImage,
     }
 ];
 
