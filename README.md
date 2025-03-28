@@ -1,5 +1,5 @@
 # jini.dev
-
+![GnIpKOYbgAEtU40](https://github.com/user-attachments/assets/47539d63-5069-425b-8b1e-42292c5e5583)  
 개인 포트폴리오 웹사이트입니다. 터미널 인터페이스를 통해 정보를 탐색할 수 있습니다.
 
 ## 기술 스택
