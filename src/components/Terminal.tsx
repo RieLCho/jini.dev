@@ -1,4 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { FloatingWindow } from './FloatingWindow';
+import { PersonalInfo } from '../main/PersonalInfo';
+import { WorkExperiences } from '../main/WorkExperiences';
+import { Education } from '../main/Education';
+import { PersonalProjects } from '../main/PersonalProjects';
+import Contributions from '../main/Contributions';
+import { WindowManager } from '../main/WindowManager';
 
 interface Command {
     input: string;
@@ -6,9 +13,10 @@ interface Command {
 }
 
 interface FileSystemNode {
-    type: 'file' | 'directory';
+    type: 'file' | 'directory' | 'binary';
     name: string;
     content?: string;
+    component?: string;
     children?: { [key: string]: FileSystemNode };
 }
 
@@ -171,27 +179,35 @@ export const Terminal: React.FC = () => {
                         type: 'directory',
                         name: 'user',
                         children: {
-                            'about.txt': {
-                                type: 'file',
-                                name: 'about.txt',
-                                content:
-                                    '안녕하세요! 저는 웹 개발에 열정을 가진 풀스택 개발자입니다.\n사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드를 작성하는 것을 좋아합니다.',
+                            about: {
+                                type: 'binary',
+                                name: 'about',
+                                component: 'PersonalInfo',
                             },
-                            'experience.txt': {
-                                type: 'file',
-                                name: 'experience.txt',
-                                content:
-                                    'NGINE STUDIOS @ NEXON COMPANY\n2021.08 ~ (재직 중)\n\n- AD Creator 프론트엔드 개발\n- 넥슨 크리에이터즈 프론트엔드 개발',
+                            experience: {
+                                type: 'binary',
+                                name: 'experience',
+                                component: 'WorkExperiences',
                             },
-                            'education.txt': {
-                                type: 'file',
-                                name: 'education.txt',
-                                content: '동국대학교 공과대학 컴퓨터공학과\n2019.03 ~ (재학 중)\nGPA: 3.76/4.5',
+                            education: {
+                                type: 'binary',
+                                name: 'education',
+                                component: 'Education',
                             },
-                            'skills.txt': {
-                                type: 'file',
-                                name: 'skills.txt',
-                                content: 'React, TypeScript, Node.js, Next.js',
+                            skills: {
+                                type: 'binary',
+                                name: 'skills',
+                                component: 'PersonalInfo',
+                            },
+                            projects: {
+                                type: 'binary',
+                                name: 'projects',
+                                component: 'PersonalProjects',
+                            },
+                            contributions: {
+                                type: 'binary',
+                                name: 'contributions',
+                                component: 'Contributions',
                             },
                         },
                     },
@@ -201,13 +217,45 @@ export const Terminal: React.FC = () => {
                 type: 'file',
                 name: 'README.md',
                 content:
-                    'Welcome to my portfolio!\n\nUse the following commands to navigate:\n- ls: List directory contents\n- cd: Change directory\n- cat: Display file contents\n- pwd: Print working directory\n- help: Show available commands',
+                    'Welcome to my portfolio!\n\nUse the following commands to navigate:\n- ls: List directory contents\n- cd: Change directory\n- cat: Display file contents\n- run: Open binary files in a window\n- pwd: Print working directory\n- help: Show available commands',
+            },
+            main: {
+                type: 'directory',
+                name: 'main',
+                children: {
+                    'PersonalInfo.tsx': {
+                        type: 'file',
+                        name: 'PersonalInfo.tsx',
+                        content: '// PersonalInfo 컴포넌트 소스 코드',
+                    },
+                    'WorkExperiences.tsx': {
+                        type: 'file',
+                        name: 'WorkExperiences.tsx',
+                        content: '// WorkExperiences 컴포넌트 소스 코드',
+                    },
+                    'Education.tsx': {
+                        type: 'file',
+                        name: 'Education.tsx',
+                        content: '// Education 컴포넌트 소스 코드',
+                    },
+                    'PersonalProjects.tsx': {
+                        type: 'file',
+                        name: 'PersonalProjects.tsx',
+                        content: '// PersonalProjects 컴포넌트 소스 코드',
+                    },
+                    'Contributions.tsx': {
+                        type: 'file',
+                        name: 'Contributions.tsx',
+                        content: '// Contributions 컴포넌트 소스 코드',
+                    },
+                },
             },
         },
     });
     const terminalRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [nanoEditor, setNanoEditor] = useState<NanoEditor | null>(null);
+    const [openWindows, setOpenWindows] = useState<{ id: string; title: string; component: string }[]>([]);
 
     const systemInfo: SystemInfo = {
         os: 'Portfolio OS',
@@ -365,6 +413,7 @@ export const Terminal: React.FC = () => {
                     <li>ls - 디렉토리 내용 표시</li>
                     <li>cd [directory] - 디렉토리 이동</li>
                     <li>cat [file] - 파일 내용 표시</li>
+                    <li>run [binary] - 바이너리 파일 실행</li>
                     <li>pwd - 현재 작업 디렉토리 표시</li>
                     <li>mkdir [directory] - 새 디렉토리 생성</li>
                     <li>neofetch - 시스템 정보 표시</li>
@@ -401,8 +450,18 @@ export const Terminal: React.FC = () => {
             return (
                 <div className="grid grid-cols-2 gap-2">
                     {items.map((item, index) => (
-                        <div key={index} className={item.type === 'directory' ? 'text-blue-400' : 'text-green-400'}>
+                        <div
+                            key={index}
+                            className={
+                                item.type === 'directory'
+                                    ? 'text-blue-400'
+                                    : item.type === 'binary'
+                                      ? 'text-purple-400'
+                                      : 'text-green-400'
+                            }
+                        >
                             {item.name}
+                            {item.type === 'binary' ? ' (binary)' : ''}
                         </div>
                     ))}
                 </div>
@@ -442,57 +501,47 @@ export const Terminal: React.FC = () => {
             }
 
             const file = current.children?.[fileName];
-            if (!file || file.type !== 'file') {
+            if (!file) {
                 return <p className="text-red-500">Error: File not found</p>;
             }
+
+            if (file.type === 'binary') {
+                return (
+                    <p className="text-yellow-500">
+                        Error: Cannot display binary file content. Use 'run' command to execute.
+                    </p>
+                );
+            }
+
+            if (file.type !== 'file') {
+                return <p className="text-red-500">Error: Not a file</p>;
+            }
+
             return <pre className="whitespace-pre-wrap text-white">{file.content}</pre>;
         },
         pwd: () => {
             return <p>{currentPath.join('/')}</p>;
         },
-        about: () => (
-            <div className="space-y-2">
-                <p>안녕하세요! 저는 웹 개발에 열정을 가진 풀스택 개발자입니다.</p>
-                <p>사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드를 작성하는 것을 좋아합니다.</p>
-            </div>
-        ),
-        experience: () => (
-            <div className="space-y-4">
-                <div className="border-l-2 border-primary-500 pl-4">
-                    <h3 className="font-bold">NGINE STUDIOS @ NEXON COMPANY</h3>
-                    <p className="text-secondary-600">2021.08 ~ (재직 중)</p>
-                    <ul className="list-disc list-inside mt-2 space-y-1">
-                        <li>AD Creator 프론트엔드 개발</li>
-                        <li>넥슨 크리에이터즈 프론트엔드 개발</li>
-                    </ul>
-                </div>
-            </div>
-        ),
-        education: () => (
-            <div className="space-y-4">
-                <div className="border-l-2 border-primary-500 pl-4">
-                    <h3 className="font-bold">동국대학교 공과대학 컴퓨터공학과</h3>
-                    <p className="text-secondary-600">2019.03 ~ (재학 중)</p>
-                    <p className="text-secondary-600">GPA: 3.76/4.5</p>
-                </div>
-            </div>
-        ),
-        projects: () => (
-            <div className="space-y-4">
-                <p>프로젝트 목록을 불러오는 중...</p>
-            </div>
-        ),
-        skills: () => (
-            <div className="space-y-2">
-                <p>기술 스택:</p>
-                <div className="flex flex-wrap gap-2">
-                    <span className="px-2 py-1 bg-primary-100 text-primary-600 rounded">React</span>
-                    <span className="px-2 py-1 bg-primary-100 text-primary-600 rounded">TypeScript</span>
-                    <span className="px-2 py-1 bg-primary-100 text-primary-600 rounded">Node.js</span>
-                    <span className="px-2 py-1 bg-primary-100 text-primary-600 rounded">Next.js</span>
-                </div>
-            </div>
-        ),
+        about: () => {
+            commandsList.run(['about']);
+            return <p>Running about...</p>;
+        },
+        experience: () => {
+            commandsList.run(['experience']);
+            return <p>Running experience...</p>;
+        },
+        education: () => {
+            commandsList.run(['education']);
+            return <p>Running education...</p>;
+        },
+        projects: () => {
+            commandsList.run(['projects']);
+            return <p>Running projects...</p>;
+        },
+        skills: () => {
+            commandsList.run(['skills']);
+            return <p>Running skills...</p>;
+        },
         contact: () => (
             <div className="space-y-2">
                 <p>연락처:</p>
@@ -550,6 +599,42 @@ export const Terminal: React.FC = () => {
                 });
                 return null;
             }
+        },
+        run: (args: string[]) => {
+            if (args.length === 0) {
+                return <p className="text-red-500">Error: Please specify a binary file</p>;
+            }
+            const fileName = args[0];
+            let current = fileSystem;
+
+            // 현재 경로에 따라 파일 시스템 탐색
+            for (const dir of currentPath.slice(1)) {
+                if (current.children && current.children[dir]) {
+                    current = current.children[dir];
+                }
+            }
+
+            const file = current.children?.[fileName];
+            if (!file) {
+                return <p className="text-red-500">Error: File not found</p>;
+            }
+
+            if (file.type !== 'binary') {
+                return <p className="text-red-500">Error: Not a binary file</p>;
+            }
+
+            // 윈도우 추가 (WindowManager에서 관리됨)
+            const windowId = Date.now().toString();
+            setOpenWindows((prev) => [
+                ...prev,
+                {
+                    id: windowId,
+                    title: fileName,
+                    component: file.component || '',
+                },
+            ]);
+
+            return <p>Running {fileName}...</p>;
         },
     };
 
@@ -686,6 +771,11 @@ export const Terminal: React.FC = () => {
         setNanoEditor(null);
     };
 
+    // 윈도우 닫기 핸들러 추가
+    const handleCloseWindow = (windowId: string) => {
+        setOpenWindows((prev) => prev.filter((window) => window.id !== windowId));
+    };
+
     useEffect(() => {
         if (showNeofetch) {
             setCommands([{ input: 'neofetch', output: neofetchOutput() }]);
@@ -698,7 +788,7 @@ export const Terminal: React.FC = () => {
     }, [commands, showNeofetch]);
 
     return (
-        <>
+        <div className="relative">
             <div className="w-full max-w-3xl mx-auto bg-secondary-900 rounded-lg shadow-lg overflow-hidden">
                 <div className="bg-secondary-800 px-4 py-2 flex items-center">
                     <div className="flex gap-2">
@@ -747,6 +837,23 @@ export const Terminal: React.FC = () => {
                     onCancel={handleNanoCancel}
                 />
             )}
-        </>
+
+            {/* 열린 윈도우 직접 렌더링 */}
+            {openWindows.map((window) => (
+                <FloatingWindow
+                    key={window.id}
+                    title={window.title}
+                    onClose={() => handleCloseWindow(window.id)}
+                    initialX={Math.random() * 100 + 50}
+                    initialY={Math.random() * 100 + 50}
+                >
+                    {window.component === 'PersonalInfo' && <PersonalInfo />}
+                    {window.component === 'WorkExperiences' && <WorkExperiences />}
+                    {window.component === 'Education' && <Education />}
+                    {window.component === 'PersonalProjects' && <PersonalProjects />}
+                    {window.component === 'Contributions' && <Contributions />}
+                </FloatingWindow>
+            ))}
+        </div>
     );
 };
