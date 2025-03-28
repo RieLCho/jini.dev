@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaTimes, FaWindowMaximize, FaWindowMinimize } from 'react-icons/fa';
+import { FaTimes, FaWindowMaximize, FaWindowRestore } from 'react-icons/fa';
 import { IconBase } from 'react-icons';
 
 interface FloatingWindowProps {
@@ -161,10 +161,10 @@ export const FloatingWindow: React.FC<FloatingWindowProps> = ({
                 <div className="text-white font-bold truncate">{title}</div>
                 <div className="flex items-center space-x-2">
                     <button className="text-white hover:bg-secondary-600 p-1 rounded" onClick={toggleMaximize}>
-                        {isMaximized ? '−' : '□'}
+                        {isMaximized ? <FaWindowRestore size={14} /> : <FaWindowMaximize size={14} />}
                     </button>
                     <button className="text-secondary-300 hover:text-white focus:outline-none" onClick={onClose}>
-                        ×
+                        <FaTimes size={16} />
                     </button>
                 </div>
             </div>
