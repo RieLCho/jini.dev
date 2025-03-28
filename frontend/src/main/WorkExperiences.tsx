@@ -4,7 +4,10 @@ interface Experience {
     company: string;
     position: string;
     period: string;
-    description: string[];
+    description: {
+        text: string;
+        url?: string;
+    }[];
     skills: string[];
 }
 
@@ -14,10 +17,22 @@ const experienceData: Experience[] = [
         position: 'Frontend Developer',
         period: '2021.08 - ',
         description: [
-            'AD Creator 프론트엔드 개발', // https://docs.gamescale.io/ko/doc/49/categories/13993
-            '넥슨 크리에이터즈 프론트엔드 개발', //https://creators.nexon.com/
-            '넥슨 크리에이터즈 플랫폼의 전세계 도약을 위한 검색 엔진 최적호 여정', // https://www.intelligencelabs.tech/86c22758-0540-4732-be7c-2494a44b893e
-            'The First Descendant 개발자 크레딧 등재', //https://x.com/jini_QwQ/status/1808043158485586000
+            {
+                text: '🛠️ AD Creator 프론트엔드 개발',
+                url: 'https://docs.gamescale.io/ko/doc/49/categories/13993',
+            },
+            {
+                text: '🛠️ 넥슨 크리에이터즈 프론트엔드 개발',
+                url: 'https://creators.nexon.com/',
+            },
+            {
+                text: '📚 넥슨 크리에이터즈 플랫폼의 전세계 도약을 위한 검색 엔진 최적화 여정',
+                url: 'https://www.intelligencelabs.tech/86c22758-0540-4732-be7c-2494a44b893e',
+            },
+            {
+                text: '🎉 The First Descendant 개발자 크레딧 등재',
+                url: 'https://x.com/jini_QwQ/status/1808043158485586000',
+            },
         ],
         skills: ['React', 'TypeScript', 'Tailwind CSS', 'Monorepo', 'Vite'],
     },
@@ -42,7 +57,18 @@ export const WorkExperiences: React.FC = () => {
                     <ul className="list-disc list-inside space-y-2">
                         {exp.description.map((desc, i) => (
                             <li key={i} className="text-secondary-300">
-                                {desc}
+                                {desc.url ? (
+                                    <a
+                                        href={desc.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="underline hover:text-white transition-colors"
+                                    >
+                                        {desc.text}
+                                    </a>
+                                ) : (
+                                    desc.text
+                                )}
                             </li>
                         ))}
                     </ul>
@@ -50,7 +76,7 @@ export const WorkExperiences: React.FC = () => {
                         {exp.skills.map((skill, i) => (
                             <span
                                 key={i}
-                                className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm"
+                                className="px-3 py-1 bg-secondary-500 text-secondary-100 rounded-full text-sm"
                             >
                                 {skill}
                             </span>
