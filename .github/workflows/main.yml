@@ -2,9 +2,9 @@ name: Deploy
 
 on:
     push:
-        branches: ['main']
-    pull_request:
-        branches: ['main']
+        branches:
+            - 'main'
+            - 'develop'
 
 jobs:
     deploy:
@@ -34,11 +34,13 @@ jobs:
                   script: |
                       cd /home/ubuntu/workspace/jini.dev
                       echo "cd into project directory"
-                      sudo git switch main
-                      echo "switched to main branch"
-                      sudo git pull
-                      echo "pulled latest changes"
-                      sudo yarn install --frozen-lockfile
+                      nvm use
+                      echo "nvm activated"
+                      sudo git fetch
+                      echo "fetched latest changes"
+                      sudo git switch ${{ github.head_ref }}
+                      echo "switched to ${{ github.head_ref }} branch"
+                      sudo yarn
                       echo "dependencies installed"
                       sudo yarn build
                       echo "project built"
