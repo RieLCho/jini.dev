@@ -132,9 +132,9 @@ const NanoEditor: React.FC<{
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-secondary-900 w-[800px] h-[600px] rounded-lg shadow-lg flex flex-col">
+            <div className="bg-secondary-900 w-[1000px] h-[700px] rounded-lg shadow-lg flex flex-col">
                 <div className="bg-secondary-800 px-4 py-2 flex items-center justify-between">
-                    <div className="text-white font-ascii">nano {fileName}</div>
+                    <div className="text-white font-ascii text-[16px]">nano {fileName}</div>
                     <div className="flex gap-2">
                         <div className="w-3 h-3 rounded-full bg-red-500"></div>
                         <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -147,11 +147,11 @@ const NanoEditor: React.FC<{
                         value={editorContent}
                         onChange={(e) => setEditorContent(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        className="w-full h-full bg-transparent text-white font-ascii resize-none outline-none"
+                        className="w-full h-full bg-transparent text-white font-ascii text-[16px] resize-none outline-none"
                         spellCheck="false"
                     />
                 </div>
-                <div className="bg-secondary-800 px-4 py-2 text-white font-ascii text-sm">^O Write Out ^X Exit</div>
+                <div className="bg-secondary-800 px-4 py-2 text-white font-ascii text-[14px]">^O Write Out ^X Exit</div>
             </div>
         </div>
     );
@@ -280,7 +280,7 @@ Feel free to explore and interact with the terminal!`,
     const neofetchOutput = () => (
         <div className="font-ascii whitespace-pre">
             <div className="flex">
-                <div className="w-[300px] font-ascii text-[12px] leading-[1.2]">
+                <div className="w-[350px] font-ascii text-[14px] leading-[1.2]">
                     <TypewriterText text={`            .-/+oossssoo+/-.`} delay={0} isLogo={true} />
                     <br />
                     <TypewriterText text={`        \`:+ssssssssssssssssss+:\``} delay={25} isLogo={true} />
@@ -759,7 +759,7 @@ Feel free to explore and interact with the terminal!`,
     }, [commands, showNeofetch, isMobile]);
 
     return (
-        <div className="relative w-[800px]">
+        <div className="relative w-[1000px]">
             <div className="w-full bg-secondary-900 rounded-lg shadow-lg overflow-hidden">
                 <div className="bg-secondary-800 px-4 py-2 flex items-center">
                     <div className="flex gap-2">
@@ -770,7 +770,7 @@ Feel free to explore and interact with the terminal!`,
                 </div>
                 <div
                     ref={terminalRef}
-                    className="h-[600px] bg-secondary-700 overflow-y-auto p-4 font-ascii text-[12px] text-secondary-100"
+                    className="h-[700px] bg-secondary-700 overflow-y-auto p-4 font-ascii text-[16px] text-secondary-100"
                 >
                     <div className="space-y-2">
                         {commands.map((cmd, index) => (
@@ -791,7 +791,7 @@ Feel free to explore and interact with the terminal!`,
                             value={currentInput}
                             onChange={(e) => setCurrentInput(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            className="flex-1 bg-transparent border-none outline-none text-secondary-100 font-ascii"
+                            className="flex-1 bg-transparent border-none outline-none text-secondary-100 font-ascii text-[16px]"
                             autoFocus
                             spellCheck="false"
                             autoComplete="off"
