@@ -7,6 +7,7 @@ export interface Contribution {
         status: 'merged' | 'open' | 'closed';
     }[];
     skills: string[];
+    icon?: string;
 }
 
 export interface SystemInfo {

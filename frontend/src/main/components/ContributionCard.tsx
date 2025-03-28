@@ -1,23 +1,21 @@
 import React from 'react';
-import { FaGithub, FaLinux } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import { Contribution } from '../types';
 import { PullRequestStatus } from './PullRequestStatus';
 import { SkillBadge } from './SkillBadge';
+import { ProjectIcon } from './ProjectIcon';
 
 interface ContributionCardProps {
     contribution: Contribution;
 }
 
 export const ContributionCard: React.FC<ContributionCardProps> = ({ contribution }) => {
-    const isArchLinux = contribution.project.includes('ttf-') || 
-                       contribution.description.includes('Arch Linux User Repository');
-    
     return (
         <div className="bg-secondary-800 rounded-lg p-6 space-y-4 hover:bg-secondary-700 transition-colors">
             <div className="flex items-start justify-between">
                 <div>
                     <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                        {isArchLinux ? <FaLinux /> : <FaGithub />}
+                        <ProjectIcon iconName={contribution.icon} />
                         {contribution.project}
                     </h3>
                     <p className="text-secondary-300">{contribution.description}</p>

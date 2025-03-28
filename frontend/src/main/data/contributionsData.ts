@@ -12,6 +12,7 @@ export const contributionsData: Contribution[] = [
             },
         ],
         skills: ['CMake', 'C#'],
+        icon: 'SiSharex',
     },
     {
         project: 'flameshot',
@@ -34,6 +35,7 @@ export const contributionsData: Contribution[] = [
             },
         ],
         skills: ['CMake', 'C++', 'Qt'],
+        icon: 'SiFlameshot',
     },
     {
         project: 'misskey',
@@ -46,6 +48,7 @@ export const contributionsData: Contribution[] = [
             },
         ],
         skills: ['CSS', 'Vue', 'TypeScript'],
+        icon: 'SiMisskey',
     },
     {
         project: 'ttf-proggy-vector',
@@ -58,6 +61,7 @@ export const contributionsData: Contribution[] = [
             },
         ],
         skills: ['Arch Linux', 'PKGBUILD'],
+        icon: 'GrArchlinux',
     },
     {
         project: 'ttf-neodgm-pro',
@@ -70,5 +74,6 @@ export const contributionsData: Contribution[] = [
             },
         ],
         skills: ['Arch Linux', 'PKGBUILD'],
+        icon: 'GrArchlinux',
     }
 ]; 
