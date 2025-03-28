@@ -58,11 +58,11 @@ export const WindowManager: React.FC<WindowManagerProps> = ({ onCloseWindow, ope
 
     return (
         <>
-            {openWindows.map((window, index) => (
+            {openWindows.map((windowModal, index) => (
                 <FloatingWindow
-                    key={window.id}
-                    title={window.title}
-                    onClose={() => onCloseWindow(window.id)}
+                    key={windowModal.id}
+                    title={windowModal.title}
+                    onClose={() => onCloseWindow(windowModal.id)}
                     initialWidth={isMobile ? window.innerWidth : 600}
                     initialHeight={isMobile ? window.innerHeight - 100 : 400}
                     initialX={isMobile ? 0 : Math.random() * 100 + 50}
@@ -72,7 +72,7 @@ export const WindowManager: React.FC<WindowManagerProps> = ({ onCloseWindow, ope
                     isDraggable={!isMobile}
                 >
                     <div className={`${isMobile ? 'p-4' : 'p-6'} overflow-auto h-full`}>
-                        {renderComponent(window.component)}
+                        {renderComponent(windowModal.component)}
                     </div>
                 </FloatingWindow>
             ))}
