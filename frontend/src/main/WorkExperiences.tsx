@@ -10,28 +10,16 @@ interface Experience {
 
 const experienceData: Experience[] = [
     {
-        company: '네이버',
-        position: '백엔드 개발 인턴',
-        period: '2023.07 - 2023.08',
+        company: 'NGINE STUDIOS @ NEXON COMPANY',
+        position: 'Frontend Developer',
+        period: '2021.08 - ',
         description: [
-            'MSA 환경에서 Spring Boot를 사용한 백엔드 서비스 개발',
-            'Kafka를 활용한 실시간 데이터 처리 시스템 구축',
-            'JUnit을 활용한 테스트 자동화 구현',
-            'Docker와 Kubernetes를 활용한 컨테이너 배포 관리',
+            'AD Creator 프론트엔드 개발', // https://docs.gamescale.io/ko/doc/49/categories/13993
+            '넥슨 크리에이터즈 프론트엔드 개발', //https://creators.nexon.com/
+            '넥슨 크리에이터즈 플랫폼의 전세계 도약을 위한 검색 엔진 최적호 여정', // https://www.intelligencelabs.tech/86c22758-0540-4732-be7c-2494a44b893e
+            'The First Descendant 개발자 크레딧 등재', //https://x.com/jini_QwQ/status/1808043158485586000
         ],
-        skills: ['Java', 'Spring Boot', 'Kafka', 'Docker', 'Kubernetes', 'MySQL'],
-    },
-    {
-        company: '카카오',
-        position: '프론트엔드 개발 인턴',
-        period: '2022.12 - 2023.02',
-        description: [
-            'React와 TypeScript를 사용한 웹 애플리케이션 개발',
-            'Redux를 활용한 상태 관리 시스템 구축',
-            'Jest와 React Testing Library를 활용한 테스트 작성',
-            'Storybook을 활용한 컴포넌트 문서화',
-        ],
-        skills: ['React', 'TypeScript', 'Redux', 'Jest', 'Storybook', 'Tailwind CSS'],
+        skills: ['React', 'TypeScript', 'Tailwind CSS', 'Monorepo', 'Vite'],
     },
 ];
 
