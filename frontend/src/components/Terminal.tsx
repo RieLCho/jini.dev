@@ -21,22 +21,18 @@ interface FileSystemNode {
 }
 
 interface SystemInfo {
+    hostname: string;
     os: string;
-    host: string;
     kernel: string;
     uptime: string;
     packages: string;
     shell: string;
-    resolution: string;
-    de: string;
-    wm: string;
     theme: string;
     icons: string;
     terminal: string;
     cpu: string;
-    memory: string;
     gpu: string;
-    disk: string;
+    memory: string;
 }
 
 interface NanoEditor {
@@ -251,25 +247,7 @@ Feel free to explore and interact with the terminal!`,
     const inputRef = useRef<HTMLInputElement>(null);
     const [nanoEditor, setNanoEditor] = useState<NanoEditor | null>(null);
     const [openWindows, setOpenWindows] = useState<{ id: string; title: string; component: string }[]>([]);
-
-    const systemInfo: SystemInfo = {
-        os: 'Portfolio OS',
-        host: 'portfolio-terminal',
-        kernel: 'React 18.2.0',
-        uptime: '1 minute',
-        packages: 'npm (6)',
-        shell: 'portfolio-shell',
-        resolution: '1920x1080',
-        de: 'Web Browser',
-        wm: 'Browser Window',
-        theme: 'Dark Mode',
-        icons: 'Material Icons',
-        terminal: 'Portfolio Terminal',
-        cpu: 'Intel(R) Core(TM) i7-12700K',
-        memory: '16GB / 32GB',
-        gpu: 'NVIDIA GeForce RTX 3080',
-        disk: '1TB / 2TB',
-    };
+    const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
 
     const neofetchOutput = () => (
         <div className="font-ascii whitespace-pre">
@@ -316,31 +294,31 @@ Feel free to explore and interact with the terminal!`,
                     <TypewriterText text={`            .-/+oossssoo+/-.`} delay={475} isLogo={true} />
                 </div>
                 <div className="ml-8">
-                    <TypewriterText text={`yangjin@Ryzen-5600X`} delay={500} />
+                    <TypewriterText text={`${systemInfo?.hostname || 'loading...'}`} delay={500} />
                     <br />
                     <TypewriterText text={`-------------------`} delay={525} />
                     <br />
-                    <TypewriterText text={`OS: Ubuntu 24.04.2 LTS on Windows 10 x86_64`} delay={550} />
+                    <TypewriterText text={`OS: ${systemInfo?.os || 'loading...'}`} delay={550} />
                     <br />
-                    <TypewriterText text={`Kernel: 5.15.167.4-microsoft-standard-WSL2`} delay={575} />
+                    <TypewriterText text={`Kernel: ${systemInfo?.kernel || 'loading...'}`} delay={575} />
                     <br />
-                    <TypewriterText text={`Uptime: 1 hour, 29 mins`} delay={600} />
+                    <TypewriterText text={`Uptime: ${systemInfo?.uptime || 'loading...'}`} delay={600} />
                     <br />
-                    <TypewriterText text={`Packages: 711 (dpkg)`} delay={625} />
+                    <TypewriterText text={`Packages: ${systemInfo?.packages || 'loading...'}`} delay={625} />
                     <br />
-                    <TypewriterText text={`Shell: bash 5.2.21`} delay={650} />
+                    <TypewriterText text={`Shell: ${systemInfo?.shell || 'loading...'}`} delay={650} />
                     <br />
-                    <TypewriterText text={`Theme: Adwaita [GTK3]`} delay={675} />
+                    <TypewriterText text={`Theme: ${systemInfo?.theme || 'loading...'}`} delay={675} />
                     <br />
-                    <TypewriterText text={`Icons: Adwaita [GTK3]`} delay={700} />
+                    <TypewriterText text={`Icons: ${systemInfo?.icons || 'loading...'}`} delay={700} />
                     <br />
-                    <TypewriterText text={`Terminal: Windows Terminal`} delay={725} />
+                    <TypewriterText text={`Terminal: ${systemInfo?.terminal || 'loading...'}`} delay={725} />
                     <br />
-                    <TypewriterText text={`CPU: AMD Ryzen 5 5600X (12) @ 3.700GHz`} delay={750} />
+                    <TypewriterText text={`CPU: ${systemInfo?.cpu || 'loading...'}`} delay={750} />
                     <br />
-                    <TypewriterText text={`GPU: b4b4:00:00.0 Microsoft Corporation Basic Render Driver`} delay={775} />
+                    <TypewriterText text={`GPU: ${systemInfo?.gpu || 'loading...'}`} delay={775} />
                     <br />
-                    <TypewriterText text={`Memory: 1581MiB / 15939MiB`} delay={800} />
+                    <TypewriterText text={`Memory: ${systemInfo?.memory || 'loading...'}`} delay={800} />
                 </div>
             </div>
         </div>
@@ -740,6 +718,25 @@ Feel free to explore and interact with the terminal!`,
     const handleCloseWindow = (windowId: string) => {
         setOpenWindows((prev) => prev.filter((window) => window.id !== windowId));
     };
+
+    useEffect(() => {
+        const fetchSystemInfo = async () => {
+            try {
+                const response = await fetch(
+                    `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/system/info`,
+                );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch system info');
+                }
+                const data = await response.json();
+                setSystemInfo(data);
+            } catch (error) {
+                console.error('Error fetching system info:', error);
+            }
+        };
+
+        fetchSystemInfo();
+    }, []);
 
     useEffect(() => {
         if (showNeofetch && !isMobile) {

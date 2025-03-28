@@ -1,11 +1,13 @@
-FROM node:22-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json ./
-RUN yarn install --frozen-lockfile
+RUN apk add --no-cache pciutils dpkg
+
+COPY package*.json ./
+RUN npm install
 
 COPY . .
+RUN npm run build
 
-EXPOSE 3000
-CMD ["yarn", "start"] 
+CMD ["npm", "run", "dev"] 
