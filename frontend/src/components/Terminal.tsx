@@ -6,6 +6,7 @@ import { Education } from '../main/Education';
 import { PersonalProjects } from '../main/PersonalProjects';
 import { Contributions } from '../main/Contributions';
 import { WindowManager } from '../main/WindowManager';
+import { useQuery } from '@tanstack/react-query';
 
 interface Command {
     input: string;
@@ -156,6 +157,33 @@ const NanoEditor: React.FC<{
     );
 };
 
+const LoadingDots = () => {
+    const [dots, setDots] = useState('.');
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDots((prev) => (prev.length >= 3 ? '.' : prev + '.'));
+        }, 500);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    return <span>{dots}</span>;
+};
+
+const useSystemInfo = () => {
+    return useQuery({
+        queryKey: ['systemInfo'],
+        queryFn: async () => {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/system/info`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch system info');
+            }
+            return response.json() as Promise<SystemInfo>;
+        },
+    });
+};
+
 export const Terminal: React.FC = () => {
     const [isMobile] = useState(window.innerWidth <= 768);
     const [commands, setCommands] = useState<Command[]>([]);
@@ -164,6 +192,7 @@ export const Terminal: React.FC = () => {
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [currentPath, setCurrentPath] = useState<string[]>(['/']);
     const [showNeofetch, setShowNeofetch] = useState(!isMobile);
+    const { data: systemInfo } = useSystemInfo();
     const [fileSystem, setFileSystem] = useState<FileSystemNode>({
         type: 'directory',
         name: '/',
@@ -247,7 +276,6 @@ Feel free to explore and interact with the terminal!`,
     const inputRef = useRef<HTMLInputElement>(null);
     const [nanoEditor, setNanoEditor] = useState<NanoEditor | null>(null);
     const [openWindows, setOpenWindows] = useState<{ id: string; title: string; component: string }[]>([]);
-    const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
 
     const neofetchOutput = () => (
         <div className="font-ascii whitespace-pre">
@@ -294,31 +322,31 @@ Feel free to explore and interact with the terminal!`,
                     <TypewriterText text={`            .-/+oossssoo+/-.`} delay={475} isLogo={true} />
                 </div>
                 <div className="ml-8">
-                    <TypewriterText text={`${systemInfo?.hostname || 'loading...'}`} delay={500} />
+                    <TypewriterText text={`${systemInfo?.hostname || <LoadingDots />}`} delay={500} />
                     <br />
                     <TypewriterText text={`-------------------`} delay={525} />
                     <br />
-                    <TypewriterText text={`OS: ${systemInfo?.os || 'loading...'}`} delay={550} />
+                    <TypewriterText text={`OS: ${systemInfo?.os || <LoadingDots />}`} delay={550} />
                     <br />
-                    <TypewriterText text={`Kernel: ${systemInfo?.kernel || 'loading...'}`} delay={575} />
+                    <TypewriterText text={`Kernel: ${systemInfo?.kernel || <LoadingDots />}`} delay={575} />
                     <br />
-                    <TypewriterText text={`Uptime: ${systemInfo?.uptime || 'loading...'}`} delay={600} />
+                    <TypewriterText text={`Uptime: ${systemInfo?.uptime || <LoadingDots />}`} delay={600} />
                     <br />
-                    <TypewriterText text={`Packages: ${systemInfo?.packages || 'loading...'}`} delay={625} />
+                    <TypewriterText text={`Packages: ${systemInfo?.packages || <LoadingDots />}`} delay={625} />
                     <br />
-                    <TypewriterText text={`Shell: ${systemInfo?.shell || 'loading...'}`} delay={650} />
+                    <TypewriterText text={`Shell: ${systemInfo?.shell || <LoadingDots />}`} delay={650} />
                     <br />
-                    <TypewriterText text={`Theme: ${systemInfo?.theme || 'loading...'}`} delay={675} />
+                    <TypewriterText text={`Theme: ${systemInfo?.theme || <LoadingDots />}`} delay={675} />
                     <br />
-                    <TypewriterText text={`Icons: ${systemInfo?.icons || 'loading...'}`} delay={700} />
+                    <TypewriterText text={`Icons: ${systemInfo?.icons || <LoadingDots />}`} delay={700} />
                     <br />
-                    <TypewriterText text={`Terminal: ${systemInfo?.terminal || 'loading...'}`} delay={725} />
+                    <TypewriterText text={`Terminal: ${systemInfo?.terminal || <LoadingDots />}`} delay={725} />
                     <br />
-                    <TypewriterText text={`CPU: ${systemInfo?.cpu || 'loading...'}`} delay={750} />
+                    <TypewriterText text={`CPU: ${systemInfo?.cpu || <LoadingDots />}`} delay={750} />
                     <br />
-                    <TypewriterText text={`GPU: ${systemInfo?.gpu || 'loading...'}`} delay={775} />
+                    <TypewriterText text={`GPU: ${systemInfo?.gpu || <LoadingDots />}`} delay={775} />
                     <br />
-                    <TypewriterText text={`Memory: ${systemInfo?.memory || 'loading...'}`} delay={800} />
+                    <TypewriterText text={`Memory: ${systemInfo?.memory || <LoadingDots />}`} delay={800} />
                 </div>
             </div>
         </div>
@@ -718,25 +746,6 @@ Feel free to explore and interact with the terminal!`,
     const handleCloseWindow = (windowId: string) => {
         setOpenWindows((prev) => prev.filter((window) => window.id !== windowId));
     };
-
-    useEffect(() => {
-        const fetchSystemInfo = async () => {
-            try {
-                const response = await fetch(
-                    `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/system/info`,
-                );
-                if (!response.ok) {
-                    throw new Error('Failed to fetch system info');
-                }
-                const data = await response.json();
-                setSystemInfo(data);
-            } catch (error) {
-                console.error('Error fetching system info:', error);
-            }
-        };
-
-        fetchSystemInfo();
-    }, []);
 
     useEffect(() => {
         if (showNeofetch && !isMobile) {
