@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub } from 'react-icons/fa';
+import { FaGithub, FaLinux } from 'react-icons/fa';
 
 interface Contribution {
     project: string;
@@ -14,25 +14,76 @@ interface Contribution {
 
 const contributionsData: Contribution[] = [
     {
-        project: 'React',
-        description: 'A JavaScript library for building user interfaces',
+        project: 'ShareX',
+        description: 'A free and open-source screenshot tool',
         pullRequests: [
             {
-                title: 'Fix: Improve error handling in useEffect cleanup',
-                url: 'https://github.com/facebook/react/pull/1234',
+                title: 'Updated missing Korean translations',
+                url: 'https://github.com/ShareX/ShareX/pull/5016/files',
+                status: 'merged',
+            },
+        ],
+        skills: ['CMake', 'C#'],
+    },
+    {
+        project: 'flameshot',
+        description: 'A free and open-source screenshot tool',
+        pullRequests: [
+            {
+                title: 'Add Korean translation',
+                url: 'https://github.com/flameshot-org/flameshot/pull/834/files',
                 status: 'merged',
             },
             {
-                title: 'Docs: Update concurrent mode documentation',
-                url: 'https://github.com/facebook/react/pull/5678',
-                status: 'open',
+                title: 'Enable Korean translation',
+                url: 'https://github.com/flameshot-org/flameshot/pull/846',
+                status: 'merged',
+            },
+            {
+                title: 'Update Internationalization_ko.ts',
+                url: 'https://github.com/flameshot-org/flameshot/pull/1033',
+                status: 'merged',
             },
         ],
-        skills: ['TypeScript', 'React', 'JavaScript'],
+        skills: ['CMake', 'C++', 'Qt'],
     },
-    // 추가 컨트리뷰션...
+    {
+        project: 'misskey',
+        description: 'A free and open-source social network service',
+        pullRequests: [
+            {
+                title: 'fix(frontend): Fix cat ears are awkward on reply modal',
+                url: 'https://github.com/misskey-dev/misskey/pull/11309',
+                status: 'merged',
+            },
+        ],
+        skills: ['CSS', 'Vue', 'TypeScript'],
+    },
+    {
+        project: 'ttf-proggy-vector',
+        description: 'Contributed proggy-vector font installation script on Arch Linux User Repository',
+        pullRequests: [
+            {
+                title: 'initial commit',
+                url: 'https://aur.archlinux.org/cgit/aur.git/commit/PKGBUILD?h=ttf-proggy-vector',
+                status: 'merged',
+            },
+        ],
+        skills: ['Arch Linux', 'PKGBUILD'],
+    },
+    {
+        project: 'ttf-neodgm-pro',
+        description: 'Contributed neodgm-pro font installation script on Arch Linux User Repository',
+        pullRequests: [
+            {
+                title: 'initial commit',
+                url: 'https://aur.archlinux.org/cgit/aur.git/commit/PKGBUILD?h=ttf-neodgm-pro',
+                status: 'merged',
+            },
+        ],
+        skills: ['Arch Linux', 'PKGBUILD'],
+    }
 ];
-
 export const Contributions: React.FC = () => {
     return (
         <div className="p-6 space-y-8">
@@ -46,7 +97,10 @@ export const Contributions: React.FC = () => {
                         <div className="flex items-start justify-between">
                             <div>
                                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                    <FaGithub />
+                                    {contribution.project.includes('ttf-') || contribution.description.includes('Arch Linux User Repository') ? 
+                                        <FaLinux /> : 
+                                        <FaGithub />
+                                    }
                                     {contribution.project}
                                 </h3>
                                 <p className="text-secondary-300">{contribution.description}</p>
