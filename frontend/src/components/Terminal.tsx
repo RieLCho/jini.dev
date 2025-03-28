@@ -398,12 +398,6 @@ Feel free to explore and interact with the terminal!`,
                 <p>사용 가능한 명령어:</p>
                 <ul className="list-disc list-inside space-y-1">
                     <li>help - 도움말 표시</li>
-                    <li>about - 자기소개</li>
-                    <li>experience - 경력</li>
-                    <li>education - 학력</li>
-                    <li>projects - 프로젝트</li>
-                    <li>skills - 기술 스택</li>
-                    <li>contact - 연락처</li>
                     <li>clear - 화면 지우기</li>
                     <li>ls - 디렉토리 내용 표시</li>
                     <li>cd [directory] - 디렉토리 이동</li>
@@ -523,36 +517,6 @@ Feel free to explore and interact with the terminal!`,
         pwd: () => {
             return <p>{currentPath.join('/')}</p>;
         },
-        about: () => {
-            commandsList.run(['about']);
-            return <p>Running about...</p>;
-        },
-        experience: () => {
-            commandsList.run(['experience']);
-            return <p>Running experience...</p>;
-        },
-        education: () => {
-            commandsList.run(['education']);
-            return <p>Running education...</p>;
-        },
-        projects: () => {
-            commandsList.run(['projects']);
-            return <p>Running projects...</p>;
-        },
-        skills: () => {
-            commandsList.run(['skills']);
-            return <p>Running skills...</p>;
-        },
-        contact: () => (
-            <div className="space-y-2">
-                <p>연락처:</p>
-                <ul className="list-disc list-inside space-y-1">
-                    <li>Email: sheepjin99@gmail.com</li>
-                    <li>GitHub: github.com/RieLCho</li>
-                    <li>Blog: sheepjin99.tistory.com</li>
-                </ul>
-            </div>
-        ),
         clear: () => {
             setCommands([]);
             return null;
