@@ -216,39 +216,38 @@ export const Terminal: React.FC = () => {
             'README.md': {
                 type: 'file',
                 name: 'README.md',
-                content:
-                    'Welcome to my portfolio!\n\nUse the following commands to navigate:\n- ls: List directory contents\n- cd: Change directory\n- cat: Display file contents\n- run: Open binary files in a window\n- pwd: Print working directory\n- help: Show available commands',
-            },
-            main: {
-                type: 'directory',
-                name: 'main',
-                children: {
-                    'PersonalInfo.tsx': {
-                        type: 'file',
-                        name: 'PersonalInfo.tsx',
-                        content: '// PersonalInfo 컴포넌트 소스 코드',
-                    },
-                    'WorkExperiences.tsx': {
-                        type: 'file',
-                        name: 'WorkExperiences.tsx',
-                        content: '// WorkExperiences 컴포넌트 소스 코드',
-                    },
-                    'Education.tsx': {
-                        type: 'file',
-                        name: 'Education.tsx',
-                        content: '// Education 컴포넌트 소스 코드',
-                    },
-                    'PersonalProjects.tsx': {
-                        type: 'file',
-                        name: 'PersonalProjects.tsx',
-                        content: '// PersonalProjects 컴포넌트 소스 코드',
-                    },
-                    'Contributions.tsx': {
-                        type: 'file',
-                        name: 'Contributions.tsx',
-                        content: '// Contributions 컴포넌트 소스 코드',
-                    },
-                },
+                content: `# Welcome to my Portfolio Terminal
+
+This is an interactive terminal-based portfolio website. You can navigate through my portfolio using various Unix-like commands.
+
+## Available Commands
+
+- \`ls\`: List directory contents
+- \`cd [directory]\`: Change directory
+- \`cat [file]\`: Display file contents
+- \`run [binary]\`: Open binary files in a window
+- \`pwd\`: Print working directory
+- \`help\`: Show available commands
+- \`clear\`: Clear the terminal screen
+- \`neofetch\`: Display system information
+
+## Quick Start
+
+1. Type \`ls\` to see available files and directories
+2. Use \`cd home\` and then \`cd user\` to navigate to my portfolio content
+3. Run \`ls\` again to see available binary files
+4. Use \`run [filename]\` to open any binary file (e.g., \`run about\`)
+
+## Binary Files
+
+- \`about\`: Personal information and introduction
+- \`experience\`: Work experience and career history
+- \`education\`: Educational background
+- \`skills\`: Technical skills and competencies
+- \`projects\`: Personal and professional projects
+- \`contributions\`: Open source contributions
+
+Feel free to explore and interact with the terminal!`,
             },
         },
     });
@@ -500,11 +499,16 @@ export const Terminal: React.FC = () => {
                 }
             }
 
-            const file = current.children?.[fileName];
-            if (!file) {
+            // 대소문자를 구분하지 않고 파일 찾기
+            const fileEntry = Object.entries(current.children || {}).find(
+                ([key]) => key.toLowerCase() === fileName.toLowerCase(),
+            );
+
+            if (!fileEntry) {
                 return <p className="text-red-500">Error: File not found</p>;
             }
 
+            const file = fileEntry[1];
             if (file.type === 'binary') {
                 return (
                     <p className="text-yellow-500">
@@ -517,7 +521,8 @@ export const Terminal: React.FC = () => {
                 return <p className="text-red-500">Error: Not a file</p>;
             }
 
-            return <pre className="whitespace-pre-wrap text-white">{file.content}</pre>;
+            // 마크다운 형식으로 표시
+            return <pre className="whitespace-pre-wrap text-white font-ascii">{file.content}</pre>;
         },
         pwd: () => {
             return <p>{currentPath.join('/')}</p>;
@@ -788,8 +793,8 @@ export const Terminal: React.FC = () => {
     }, [commands, showNeofetch]);
 
     return (
-        <div className="relative">
-            <div className="w-full max-w-3xl mx-auto bg-secondary-900 rounded-lg shadow-lg overflow-hidden">
+        <div className="relative w-[800px]">
+            <div className="w-full bg-secondary-900 rounded-lg shadow-lg overflow-hidden">
                 <div className="bg-secondary-800 px-4 py-2 flex items-center">
                     <div className="flex gap-2">
                         <div className="w-3 h-3 rounded-full bg-red-500"></div>
