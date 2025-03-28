@@ -1,5 +1,14 @@
 import React from 'react';
-import { FaGithub, FaEnvelope, FaBlog, FaMapMarkerAlt, FaUniversity, FaCode } from 'react-icons/fa';
+import {
+    FaGithub,
+    FaEnvelope,
+    FaBlog,
+    FaMapMarkerAlt,
+    FaUniversity,
+    FaCode,
+    FaTwitter,
+    FaLinkedin,
+} from 'react-icons/fa';
 
 interface SocialLink {
     icon: React.ReactNode;
@@ -12,19 +21,31 @@ export const PersonalInfo: React.FC = () => {
     const socialLinks: SocialLink[] = [
         {
             icon: <FaEnvelope className="w-5 h-5" />,
-            label: 'sheepjin99@gmail.com',
-            href: 'mailto:sheepjin99@gmail.com',
+            label: 'Gmail',
+            href: 'mailto:choyj1222@gmail.com',
         },
         {
             icon: <FaGithub className="w-5 h-5" />,
-            label: 'github.com/RieLCho',
+            label: 'GitHub',
             href: 'https://github.com/RieLCho',
             isExternal: true,
         },
         {
+            icon: <FaLinkedin className="w-5 h-5" />,
+            label: 'Linkedin',
+            href: 'https://www.linkedin.com/in/yangjin-cho-22b6a030b/',
+            isExternal: true,
+        },
+        {
             icon: <FaBlog className="w-5 h-5" />,
-            label: 'sheepjin99.tistory.com',
+            label: 'Tistory',
             href: 'https://sheepjin99.tistory.com',
+            isExternal: true,
+        },
+        {
+            icon: <FaTwitter className="w-5 h-5" />,
+            label: 'Twitter',
+            href: 'https://x.com/jini_QwQ',
             isExternal: true,
         },
     ];
@@ -40,15 +61,15 @@ export const PersonalInfo: React.FC = () => {
                 <div className="space-y-4">
                     <div>
                         <h1 className="text-2xl font-bold text-white">조양진 (Yangjin Cho)</h1>
-                        <p className="text-secondary-300">프론트엔드 엔지니어</p>
+                        <p className="text-secondary-300">Frontend Developer</p>
                     </div>
                     <div className="flex items-center gap-2 text-secondary-300">
                         <FaMapMarkerAlt />
-                        <span>서울특별시, 대한민국</span>
+                        <span>경기도 성남시, 대한민국</span>
                     </div>
                     <div className="flex items-center gap-2 text-secondary-300">
                         <FaUniversity />
-                        <span>한양대학교 컴퓨터소프트웨어학부</span>
+                        <span>동국대학교 공과대학 컴퓨터공학과</span>
                     </div>
                 </div>
             </div>
@@ -56,24 +77,46 @@ export const PersonalInfo: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-xl font-bold text-white">소개</h2>
                 <p className="text-secondary-300 leading-relaxed">
-                    안녕하세요! 저는 웹 프론트엔드 개발을 전문으로 하는 개발자입니다. 사용자 경험을 개선하고 아름다운
-                    인터페이스를 만드는 것에 열정을 가지고 있습니다. 현재는 React와 TypeScript를 주로 사용하여 개발하고
-                    있으며, 새로운 기술을 배우고 적용하는 것을 좋아합니다.
+                    Hi, my name is Yangjin Cho, but you can call me Jini or RieL.
                 </p>
             </div>
 
-            <div className="space-y-4">
-                <h2 className="text-xl font-bold text-white">주요 기술 스택</h2>
-                <div className="flex flex-wrap gap-2">
-                    {['TypeScript', 'React', 'Next.js', 'Node.js', 'Tailwind CSS', 'Docker'].map((skill) => (
-                        <span
-                            key={skill}
-                            className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm flex items-center gap-1"
-                        >
-                            <FaCode className="w-3 h-3" />
-                            {skill}
-                        </span>
-                    ))}
+            <div className="space-y-6">
+                <h2 className="text-xl font-bold text-white">기술 스택</h2>
+                <div className="space-y-4">
+                    <div>
+                        <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                            Always Ready <span className="text-yellow-400">⚡</span>
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {['React.js', 'TypeScript', 'Tailwind CSS'].map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm flex items-center gap-1"
+                                >
+                                    <FaCode className="w-3 h-3" />
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                            Familiar with <span className="text-blue-400">🧐</span>
+                            <span className="text-purple-400">📚</span>
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {['Python', 'Swift', 'Vue', 'C++', 'Java for Android', 'Kotlin'].map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="px-3 py-1 bg-secondary-700 text-secondary-300 rounded-full text-sm flex items-center gap-1"
+                                >
+                                    <FaCode className="w-3 h-3" />
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
