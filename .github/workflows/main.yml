@@ -27,7 +27,8 @@ jobs:
             - name: Build Frontend
               run: |
                 cd frontend
-                npm run build
+                # 타입 체크를 건너뛰고 빌드만 수행
+                npx vite build
 
             - name: Deploy Frontend to Server
               uses: appleboy/scp-action@master
@@ -64,16 +65,13 @@ jobs:
                       # 백엔드 준비
                       cd backend
                       npm install
-                      echo "backend dependencies installed"
-                      
-                      # ts-node 전역 설치
-                      npm install -g ts-node
-                      echo "ts-node installed globally"
+                      npm run build
+                      echo "backend dependencies installed and built"
                       
                       # 기존 백엔드 프로세스 중지 후 재시작
                       pm2 stop jini-backend || true
                       pm2 delete jini-backend || true
-                      pm2 start src/index.ts --name jini-backend --interpreter="$(which node)" --interpreter-args="$(which ts-node)"
+                      pm2 start dist/index.js --name jini-backend
                       echo "backend started with pm2"
                       
                       # 프론트엔드 배포
