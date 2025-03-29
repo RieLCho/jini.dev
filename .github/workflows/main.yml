@@ -18,13 +18,28 @@ jobs:
                   node-version-file: '.nvmrc'
                   cache: 'yarn'
 
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile
+            - name: Install Dependencies
+              run: |
+                cd frontend
+                yarn install --frozen-lockfile
 
-            - name: Build
-              run: yarn build
+            - name: Build Frontend
+              run: |
+                cd frontend
+                yarn build
 
-            - name: Deploy to server
+            - name: Deploy Frontend to Server
+              uses: appleboy/scp-action@master
+              with:
+                  host: ${{ secrets.REMOTE_IP }}
+                  username: ${{ secrets.REMOTE_USER }}
+                  key: ${{ secrets.REMOTE_IDENTITYFILE }}
+                  port: ${{ secrets.REMOTE_PORT }}
+                  source: "frontend/dist/"
+                  target: "/home/ubuntu/temp-deploy"
+                  strip_components: 1
+
+            - name: Deploy Backend and Configure Server
               uses: appleboy/ssh-action@master
               with:
                   host: ${{ secrets.REMOTE_IP }}
@@ -34,19 +49,35 @@ jobs:
                   script: |
                       cd /home/ubuntu/workspace/jini.dev
                       echo "cd into project directory"
-                      nvm use
-                      echo "nvm activated"
-                      sudo git fetch
+                      
+                      # 최신 코드 가져오기
+                      git fetch --all
                       echo "fetched latest changes"
-                      sudo git switch ${{ github.head_ref }}
-                      echo "switched to ${{ github.head_ref }} branch"
-                      sudo yarn
-                      echo "dependencies installed"
-                      sudo yarn build
-                      echo "project built"
+                      
+                      # 현재 브랜치 확인 및 체크아웃
+                      BRANCH="${{ github.ref_name }}"
+                      git checkout $BRANCH
+                      git pull origin $BRANCH
+                      echo "switched to $BRANCH branch"
+                      
+                      # 백엔드 준비
+                      cd backend
+                      yarn install
+                      echo "backend dependencies installed"
+                      
+                      # 기존 백엔드 프로세스 중지 후 재시작
+                      pm2 stop jini-backend || true
+                      pm2 delete jini-backend || true
+                      pm2 start src/index.ts --name jini-backend --interpreter="$(which node)" --interpreter-args="$(which ts-node)"
+                      echo "backend started with pm2"
+                      
+                      # 프론트엔드 배포
+                      cd /home/ubuntu
                       sudo rm -rf /var/www/jini.dev/*
-                      echo "old files removed"
-                      sudo cp -r dist /var/www/jini.dev
-                      echo "dist copied to /var/www/jini.dev"
+                      sudo cp -r temp-deploy/* /var/www/jini.dev/
+                      sudo rm -rf temp-deploy
+                      echo "frontend deployed to nginx"
+                      
+                      # nginx 재시작
                       sudo systemctl restart nginx
                       echo "nginx restarted"

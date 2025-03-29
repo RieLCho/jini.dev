@@ -77,4 +77,36 @@ docker-compose up --build
 
 ## 배포
 
-main 브랜치에 push하면 GitHub Actions를 통해 자동으로 배포됩니다.
+### 자동 배포 (GitHub Actions)
+
+main 또는 develop 브랜치에 push하면 GitHub Actions를 통해 자동으로 배포됩니다:
+
+1. GitHub Actions에서 프론트엔드 빌드
+2. 빌드된 파일을 SCP로 서버에 전송
+3. 서버에서 백엔드 코드를 PM2로 실행
+4. Nginx를 통해 프론트엔드 정적 파일 제공 및 백엔드 API 라우팅
+
+### 서버 설정
+
+서버 설정은 다음과 같이 진행됩니다:
+
+1. Nginx 설정 파일 적용
+```bash
+sudo cp nginx-config.conf /etc/nginx/sites-available/jini.dev
+sudo ln -s /etc/nginx/sites-available/jini.dev /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+2. PM2 설치 (백엔드 실행용)
+```bash
+npm install -g pm2 ts-node
+```
+
+### GitHub Secrets 설정
+
+GitHub 저장소에 다음 시크릿을 설정해야 합니다:
+- REMOTE_IP: 서버 IP 주소 (예: 146.56.99.166)
+- REMOTE_USER: SSH 사용자명 (예: ubuntu)
+- REMOTE_IDENTITYFILE: SSH 개인 키
+- REMOTE_PORT: SSH 포트 (기본 22)
