@@ -16,17 +16,17 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version-file: '.nvmrc'
-                  cache: 'yarn'
+                  cache: 'npm'
 
             - name: Install Dependencies
               run: |
                 cd frontend
-                yarn install --frozen-lockfile
+                npm ci
 
             - name: Build Frontend
               run: |
                 cd frontend
-                yarn build
+                npm run build
 
             - name: Deploy Frontend to Server
               uses: appleboy/scp-action@master
@@ -62,8 +62,12 @@ jobs:
                       
                       # 백엔드 준비
                       cd backend
-                      yarn install
+                      npm install
                       echo "backend dependencies installed"
+                      
+                      # ts-node 전역 설치
+                      npm install -g ts-node
+                      echo "ts-node installed globally"
                       
                       # 기존 백엔드 프로세스 중지 후 재시작
                       pm2 stop jini-backend || true
