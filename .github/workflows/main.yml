@@ -47,7 +47,7 @@ jobs:
                   strip_components: 1
 
             - name: Deploy Backend and Configure Server
-              uses: appleboy/ssh-action@1.2.2
+              uses: appleboy/ssh-action@v1.2.2
               with:
                   host: ${{ secrets.REMOTE_IP }}
                   username: ${{ secrets.REMOTE_USER }}
