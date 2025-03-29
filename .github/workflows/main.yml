@@ -30,6 +30,11 @@ jobs:
                 # 타입 체크를 건너뛰고 빌드만 수행
                 npx vite build
 
+            - name: Add Remote Server to Known Hosts
+              run: |
+                mkdir -p ~/.ssh
+                ssh-keyscan -p ${{ secrets.REMOTE_PORT }} ${{ secrets.REMOTE_IP }} >> ~/.ssh/known_hosts
+
             - name: Deploy Frontend to Server
               uses: appleboy/scp-action@master
               with:
