@@ -20,31 +20,31 @@ export const MobileLayout: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-secondary-900">
-            {/* 상단 네비게이션 바 */}
-            <nav className="fixed top-0 left-0 right-0 bg-secondary-800 border-b border-secondary-700 z-50">
-                <div className="flex overflow-x-auto">
+        <div className="min-h-screen bg-secondary-900 flex flex-col">
+            {/* 메인 콘텐츠 */}
+            <main className="flex-1 overflow-y-auto pb-16">
+                {tabs.find(tab => tab.id === activeTab)?.component}
+            </main>
+
+            {/* 하단 네비게이션 바 */}
+            <nav className="fixed bottom-0 left-0 right-0 bg-secondary-800 border-t border-secondary-700 z-50">
+                <div className="flex justify-around">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as TabType)}
-                            className={`flex items-center gap-2 px-4 py-3 text-sm whitespace-nowrap ${
+                            className={`flex flex-col items-center justify-center w-full py-2 text-xs ${
                                 activeTab === tab.id
-                                    ? 'text-white border-b-2 border-blue-500'
+                                    ? 'text-blue-500'
                                     : 'text-secondary-400 hover:text-white'
                             }`}
                         >
-                            {tab.icon}
-                            {tab.label}
+                            <div className="text-lg mb-1">{tab.icon}</div>
+                            <span>{tab.label}</span>
                         </button>
                     ))}
                 </div>
             </nav>
-
-            {/* 메인 콘텐츠 */}
-            <main className="pt-16">
-                {tabs.find(tab => tab.id === activeTab)?.component}
-            </main>
         </div>
     );
 }; 
