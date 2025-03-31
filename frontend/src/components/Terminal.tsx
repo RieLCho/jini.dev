@@ -419,6 +419,7 @@ Feel free to explore and interact with the terminal!`,
                     <li>cd [directory] - 디렉토리 이동</li>
                     <li>cat [file] - 파일 내용 표시</li>
                     <li>run [binary] - 바이너리 파일 실행</li>
+                    <li>./[binary] - 바이너리 파일 실행 (run 명령어와 동일)</li>
                     <li>pwd - 현재 작업 디렉토리 표시</li>
                     <li>mkdir [directory] - 새 디렉토리 생성</li>
                     <li>neofetch - 시스템 정보 표시</li>
@@ -617,9 +618,60 @@ Feel free to explore and interact with the terminal!`,
 
             return <p>Running {fileName}...</p>;
         },
+        './': (args: string[]) => {
+            if (args.length === 0) {
+                return <p className="text-red-500">Error: Please specify a binary file</p>;
+            }
+            const fileName = args[0];
+            let current = fileSystem;
+
+            // 현재 경로에 따라 파일 시스템 탐색
+            for (const dir of currentPath.slice(1)) {
+                if (current.children && current.children[dir]) {
+                    current = current.children[dir];
+                }
+            }
+
+            const file = current.children?.[fileName];
+            if (!file) {
+                return <p className="text-red-500">Error: File not found</p>;
+            }
+
+            if (file.type !== 'binary') {
+                return <p className="text-red-500">Error: Not a binary file</p>;
+            }
+
+            // 윈도우 추가 (WindowManager에서 관리됨)
+            const windowId = Date.now().toString();
+            setOpenWindows((prev) => [
+                ...prev,
+                {
+                    id: windowId,
+                    title: fileName,
+                    component: file.component || '',
+                },
+            ]);
+
+            return <p>Running {fileName}...</p>;
+        },
     };
 
     const handleCommand = (input: string) => {
+        // ./ 명령어를 위한 특별 처리
+        if (input.startsWith('./')) {
+            const fileName = input.slice(2);
+            const commandFn = commandsList['./' as keyof typeof commandsList];
+            if (commandFn) {
+                const output = commandFn([fileName]);
+                setCommands((prev) => [...prev, { input, output }]);
+                setHistory((prev) => [...prev, input]);
+                setHistoryIndex(-1);
+                setCurrentInput('');
+                return;
+            }
+        }
+
+        // 기존 명령어 처리
         const [command, ...args] = input.toLowerCase().trim().split(' ');
 
         if (command === 'clear') {
