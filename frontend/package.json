@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "scp": "scp -r ./dist/* ubuntu@jini.dev:/var/www/jini.dev/"
     },
     "dependencies": {
         "@headlessui/react": "^1.7.15",
