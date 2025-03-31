@@ -56,7 +56,7 @@ export const PersonalInfo: React.FC = () => {
                 <img
                     src="https://avatars.githubusercontent.com/u/13748138?s=400&u=cfa7aa7b0688ef674d8eb487bbe27af132f39093&v=4"
                     alt="Yangjin Cho"
-                    className="w-32 h-32 rounded-lg object-cover border-2 border-secondary-700"
+                    className="w-32 h-32 rounded-full object-cover border-4 border-secondary-700 shadow-lg hover:border-blue-500 transition-colors duration-300"
                 />
                 <div className="space-y-4">
                     <div>
