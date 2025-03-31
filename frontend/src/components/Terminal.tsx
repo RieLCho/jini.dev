@@ -175,11 +175,21 @@ const useSystemInfo = () => {
     return useSuspenseQuery({
         queryKey: ['systemInfo'],
         queryFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/system/info`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch system info');
-            }
-            return response.json() as Promise<SystemInfo>;
+            // 하드코딩된 시스템 정보 반환
+            return {
+                hostname: 'jini.dev',
+                os: 'Ubuntu 22.04.3 LTS',
+                kernel: '5.15.0-91-generic',
+                uptime: '2 days, 3 hours',
+                packages: '1234',
+                shell: '/bin/bash',
+                theme: 'Adwaita [GTK2/3]',
+                icons: 'Adwaita [GTK2/3]',
+                terminal: 'gnome-terminal',
+                cpu: 'Intel(R) Core(TM) i7-12700K',
+                gpu: 'NVIDIA GeForce RTX 3080',
+                memory: '16GB / 32GB'
+            };
         },
     });
 };
